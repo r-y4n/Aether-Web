@@ -40,7 +40,6 @@ type Message = {
 };
 
 function ChatContent() {
-  const { state } = useSidebar();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
