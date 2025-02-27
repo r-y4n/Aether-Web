@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { useState, useRef, useEffect } from "react";
 // Firebase
 import { initializeApp } from "firebase/app";
