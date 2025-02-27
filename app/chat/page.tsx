@@ -88,7 +88,7 @@ function ChatContent() {
 
   // Function to Call AI API
   const callAI = async (prompt: string): Promise<string> => {
-    const apiKey = process.env.NEXT_PUBLIC_GROQ_API_KEY; // Use environment variable
+    const apiKey = "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"; // Use environment variable
     if (!apiKey) {
       console.error("Missing AI API Key!");
       return "Error: AI service is unavailable.";
