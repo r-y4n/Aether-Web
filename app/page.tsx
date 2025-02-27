@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
-//eslint-disable @typescript-eslint/no-unused-vars/
+/*eslint-disable @typescript-eslint/no-unused-vars/ */
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -58,8 +58,7 @@ export default function Index() {
       <CardContent>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
+      
       </CardFooter>
     </Card>
     </SidebarInset>
