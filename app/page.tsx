@@ -52,7 +52,7 @@ export default function Index() {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-<Card className="w-[60vw]">
+<Card className="p-3 w-[60vw]">
       <CardHeader>
         <CardTitle>AnswerRight Web</CardTitle>
         <CardDescription>Chat with our AI on our new Webapp.</CardDescription>
