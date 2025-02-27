@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
-/*eslint-disable @typescript-eslint/no-unused-vars/ */
+/* eslint-disable @typescript-eslint/no-unused-vars/ */
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,6 +7,8 @@ import {
   BreadcrumbList,
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import Link from 'next/link'
 import {
   Select,
   SelectContent,
@@ -56,6 +58,7 @@ export default function Index() {
         <CardDescription>Chat with our AI on our new Webapp.</CardDescription>
       </CardHeader>
       <CardContent>
+      <Link href="/chat"className={buttonVariants({ variant: "outline" })}>Send a Message!</Link>
       </CardContent>
       <CardFooter className="flex justify-between">
       
