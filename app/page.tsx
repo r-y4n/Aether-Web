@@ -1,21 +1,12 @@
 import { AppSidebar } from "@/components/app-sidebar"
-/* eslint-disable @typescript-eslint/no-unused-vars/ */
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
 } from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button"
 import Link from 'next/link'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import {
   Card,
   CardContent,
@@ -24,8 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 
 import { Separator } from "@/components/ui/separator"
 import {
