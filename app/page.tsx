@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { AnswerRightInfoSection } from "@/components/info-section"
+import {Chrome, Bot} from "lucide-react"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -50,20 +51,37 @@ export default function Index() {
           </Breadcrumb>
         </header>
         <br></br>
-        <Card className="w-[60vw]">
+        <section>
+        <div className="flex w-[60vw] gap-4">
+        <Card className="flex-none">
           <CardHeader>
             <CardTitle>AnswerRight Web</CardTitle>
             <CardDescription>Chat with our AI on our new Webapp.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Link href="/chat" className={buttonVariants({ variant: "outline" })}>Send a Message!</Link>
+            <Link href="/chat" className={buttonVariants({ variant: "outline" })}><Bot />Send a Message!</Link>
           </CardContent>
           <CardFooter className="flex justify-between">
             <br />
           </CardFooter>
         </Card>
+        <Card className="flex-1">
+          <CardHeader>
+            <CardTitle>
+AnswerRight Web Extension
+</CardTitle>
+          <CardDescription>
+Our Chrome Extension to help find answers to selected questions online
+          </CardDescription>
+          </CardHeader>
+          <CardContent>
+<Link href="https://chromewebstore.google.com/detail/answerright/gnlldhbpjicjidknchpfgmacdeclcdfj" className={buttonVariants({ variant: "outline" })}><Chrome />Add to Chrome</Link>
+          </CardContent>
+        </Card>
+        </div>
+        </section>
         <br />
-        <br />
+        <Separator />
         <br />
 
         <Card>
@@ -79,6 +97,8 @@ export default function Index() {
           <Link href="/changelog" className={buttonVariants({ variant: "outline" })}>Changelog</Link>       <br></br>      <br></br>
           <Card>
             <CardContent>
+              <h1>Releases</h1>
+              <br />
             <ScrollArea className="h-72 w-48 rounded-md border">
       <div className="p-4">
         <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
