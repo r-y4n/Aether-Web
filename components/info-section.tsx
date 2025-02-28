@@ -120,12 +120,12 @@ export function AnswerRightInfoSection() {
                 <BookOpen className="h-16 w-16 text-muted-foreground" />
               </div>
               <div className="w-full md:w-1/2">
-                <h3 className="text-xl font-semibold mb-2">2. Upload Your Materials</h3>
+                <h3 className="text-xl font-semibold mb-2">2. Select the Text</h3>
                 <p className="text-muted-foreground mb-4">
-                  Upload your study materials - PDFs, notes, textbooks, or even take screenshots of your online courses.
+                  Highlight text, right-click on it, and select AnswerRight to send the question to the AI for an answer.
                 </p>
                 <ul className="space-y-2">
-                  {["Supports multiple file formats", "OCR for images and PDFs", "Secure and private"].map(
+                  {["Quick", "Simple", "Secure and private"].map(
                     (item, i) => (
                       <li key={i} className="flex items-center gap-2">
                         <CheckCircle className="h-5 w-5 text-primary" />
