@@ -23,6 +23,10 @@ const data = {
       isActive: true,
       items: [
         {
+          title: "Home",
+          url: "/",
+        },
+        {
           title: "Playground",
           url: "/chat",
         },
