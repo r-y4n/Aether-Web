@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AnswerRight Tester",
+  title: "AnswerRight Web",
   description: "An AI Playground powered by AnswerRight",
 };
 
