@@ -1,5 +1,5 @@
 "use client"
-// eslint-disable-file no-unescaped-entities
+
 import { Bot, BookOpen, Brain, CheckCircle, Sparkles } from "lucide-react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -202,7 +202,7 @@ export function AnswerRightInfoSection() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="italic">"{testimonial.quote}"</p>
+                <p className="italic">"&#34;{testimonial.quote}"&#34;</p>
               </CardContent>
             </Card>
           ))}
