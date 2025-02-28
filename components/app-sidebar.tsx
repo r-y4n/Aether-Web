@@ -23,7 +23,7 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "Chat with our AI",
+          title: "Playground",
           url: "/chat",
         },
         {
