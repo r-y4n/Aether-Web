@@ -29,8 +29,10 @@ export function AnswerRightInfoSection() {
               Add to Chrome
             </Link>
           </Button>
-          <Button size="lg" variant="outline" className="gap-2">
-            Learn More
+          <Button asChild size="lg" className="gap-2" variant="outline">
+            <Link href="/about">
+              Learn More
+            </Link>
           </Button>
         </div>
       </div>
