@@ -59,11 +59,16 @@ export default function Index() {
             <Link href="/chat" className={buttonVariants({ variant: "outline" })}>Send a Message!</Link>
           </CardContent>
           <CardFooter className="flex justify-between">
+            <br />
           </CardFooter>
         </Card>
         <br />
         <br />
+        <br />
+
+        <Card>
         <AnswerRightInfoSection />
+        </Card>
       </SidebarInset>
       <Card>
         <CardHeader>
