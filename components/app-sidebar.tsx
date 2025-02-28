@@ -30,10 +30,6 @@ const data = {
           title: "About Us",
           url: "/about",
         },
-        {
-          title: "Contact",
-          url: "/contact",
-        },
       ],
     },
     {

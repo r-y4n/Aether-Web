@@ -20,7 +20,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 
-export default function About() {
+export default function Changelog() {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -37,7 +37,7 @@ export default function About() {
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbLink href="/about">About</BreadcrumbLink>
+                <BreadcrumbLink href="/changelog">Changelog</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
