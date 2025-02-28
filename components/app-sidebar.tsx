@@ -10,8 +10,7 @@ import { NavMain } from "@/components/nav-main"
 import {
   Sidebar,
   SidebarContent,
-  SidebarRail,
-  SidebarFooter
+  SidebarRail
 } from "@/components/ui/sidebar"
 
 // This is sample data.
