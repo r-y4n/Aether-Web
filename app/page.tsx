@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
+import { AnswerRightInfoSection } from "@/components/info-section"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -61,6 +62,9 @@ export default function Index() {
           <CardFooter className="flex justify-between">
           </CardFooter>
         </Card>
+        <br />
+        <br />
+        <AnswerRightInfoSection />
       </SidebarInset>
       <Card>
         <CardHeader>
