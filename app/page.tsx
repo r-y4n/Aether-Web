@@ -88,7 +88,7 @@ Our Chrome Extension to help find answers to selected questions online
         <AnswerRightInfoSection />
         </Card>
       </SidebarInset>
-      <Card>
+      <Card className="hide-on-mobile">
         <CardHeader>
           <CardTitle>Announcements</CardTitle>
           <CardDescription>See our new releases, Bug Fixes, and Extension Updates!</CardDescription>
