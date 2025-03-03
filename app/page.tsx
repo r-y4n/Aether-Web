@@ -66,7 +66,7 @@ export default function Index() {
             <br />
           </CardFooter>
         </Card>
-        <Card className="flex-1">
+        <Card className="flex-1 hidden md:block">
           <CardHeader>
             <CardTitle>
 AnswerRight Web Extension
@@ -89,7 +89,7 @@ Our Chrome Extension to help find answers to selected questions online
         <AnswerRightInfoSection />
         </Card>
       </SidebarInset>
-      <Card className="hide-on-mobile">
+      <Card className="hidden md:block">
         <CardHeader>
           <CardTitle>Announcements</CardTitle>
           <CardDescription>See our new releases, Bug Fixes, and Extension Updates!</CardDescription>
