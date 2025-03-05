@@ -1,3 +1,5 @@
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AnswerRightInfoSection } from "@/components/info-section"
 import {Chrome, Bot} from "lucide-react"
@@ -36,6 +38,8 @@ import {
 export default function Index() {
   return (
     <SidebarProvider>
+      <SpeedInsights />
+      <Analytics />
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
@@ -75,6 +79,7 @@ AnswerRight Web Extension
 Our Chrome Extension to help find answers to selected questions online
           </CardDescription>
           </CardHeader>
+          <br />
           <CardContent>
 <Link href="https://chromewebstore.google.com/detail/answerright/gnlldhbpjicjidknchpfgmacdeclcdfj" className={buttonVariants({ variant: "outline" })}><Chrome />Add to Chrome</Link>
           </CardContent>
@@ -94,6 +99,7 @@ Our Chrome Extension to help find answers to selected questions online
           <CardTitle>Announcements</CardTitle>
           <CardDescription>See our new releases, Bug Fixes, and Extension Updates!</CardDescription>
         </CardHeader>
+        <br />
         <CardContent>
           <Link href="/changelog" className={buttonVariants({ variant: "outline" })}>Changelog</Link>       <br></br>      <br></br>
           <Card>
