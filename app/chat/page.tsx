@@ -98,7 +98,7 @@ function ChatContent() {
     const url = "https://api.groq.com/openai/v1/chat/completions";
     const data = {
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.3-70b-versatile",
+      model: "llama-3.3-70b-specdec",
       temperature: 0.15,
       max_tokens: 150,
       top_p: 1.0,
