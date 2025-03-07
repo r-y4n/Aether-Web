@@ -180,6 +180,22 @@ Our Chrome Extension to help find answers to selected questions online
         </Card>
       </PopoverContent>
       </Popover>
+      <Separator className="my-2" />
+      <Popover>
+        <PopoverTrigger asChild>
+          <Link href="" className="text-sm">v1.1.2</Link>
+        </PopoverTrigger>
+        <PopoverContent>
+          <Card>
+            <CardHeader>
+              v1.1.2: Speculative Decoding
+            </CardHeader>
+            <CardDescription>
+              <div className="p-4">An update that brought Speculative Decoding to our AI model, resulting in faster response times while keeping the quality of the answers.</div>
+            </CardDescription>
+          </Card>
+        </PopoverContent>
+      </Popover>
       </div>
     </ScrollArea>
             </CardContent>
