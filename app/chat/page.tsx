@@ -42,6 +42,10 @@ type Message = {
 };
 
 function ChatContent() {
+  if (localStorage.getItem("uuid") === null) {
+    localStorage.setItem("uuid", crypto.randomUUID());
+  }
+  let uuid = localStorage.getItem("uuid")
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +74,7 @@ function ChatContent() {
     });
 
     const reference = ref(database, "questionsAndAnswers");
-    push(reference, { question, answer: aiAnswer, timestamp }).catch((error) =>
+    push(reference, { question, answer: aiAnswer, timestamp, uuid }).catch((error) =>
       console.error("Error saving data to Firebase:", error)
     );
   };
