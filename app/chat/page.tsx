@@ -42,7 +42,7 @@ type Message = {
 };
 
 function ChatContent() {
-  if (window.localStorage.getItem("uuid") === null) {
+  if (localStorage.getItem("uuid") === null) {
     localStorage.setItem("uuid", crypto.randomUUID());
   }
   const uuid = localStorage.getItem("uuid")
