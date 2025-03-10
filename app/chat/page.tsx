@@ -42,10 +42,10 @@ type Message = {
 };
 
 function ChatContent() {
-  if (localStorage.getItem("uuid") === null) {
+  if (window.localStorage.getItem("uuid") === null) {
     localStorage.setItem("uuid", crypto.randomUUID());
   }
-  let uuid = localStorage.getItem("uuid")
+  const uuid = localStorage.getItem("uuid")
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -60,8 +60,6 @@ function ChatContent() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
-
-  // Function to Save to Firebase
   const saveToFirebase = (question: string, aiAnswer: string) => {
     const timestamp = new Date().toLocaleString("en-US", {
       year: "numeric",
@@ -72,14 +70,11 @@ function ChatContent() {
       second: "numeric",
       hour12: true,
     });
-
     const reference = ref(database, "questionsAndAnswers");
     push(reference, { question, answer: aiAnswer, timestamp, uuid }).catch((error) =>
       console.error("Error saving data to Firebase:", error)
     );
   };
-
-  // Function to Fetch AI Response
   const fetchGroqAnswer = async (question: string): Promise<string> => {
     const prompt = `
       Your task is to provide the most accurate answer to the following question.
@@ -87,11 +82,8 @@ function ChatContent() {
 
       Question: "${question}"
     `;
-
     return await callAI(prompt);
   };
-
-  // Function to Call AI API
   const callAI = async (prompt: string): Promise<string> => {
     const apiKey = "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"; // Use environment variable
     if (!apiKey) {
