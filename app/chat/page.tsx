@@ -33,19 +33,23 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 const database = getDatabase(firebaseApp);
-
 // Message Type Definition
 type Message = {
   id: string;
   role: "user" | "assistant";
   content: string;
 };
-
 function ChatContent() {
-  if (localStorage.getItem("uuid") === null) {
-    localStorage.setItem("uuid", crypto.randomUUID());
-  }
-  const uuid = localStorage.getItem("uuid")
+    const [uuid, setuuid] = useState<string>('');
+  
+    useEffect(() => {
+      // This code only runs in the browser
+      const storeduuid = localStorage.getItem('uuid');
+      if (storeduuid === null) {
+        setuuid(crypto.randomUUID());
+      }
+      
+    }, []);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -209,3 +213,4 @@ function ChatContent() {
 export default function Chat() {
   return <SidebarProvider><AppSidebar /><ChatContent /></SidebarProvider>;
 }
+
