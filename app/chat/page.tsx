@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -42,10 +42,22 @@ type Message = {
 };
 
 function ChatContent() {
-  if (localStorage.getItem("uuid") === null) {
-    localStorage.setItem("uuid", crypto.randomUUID());
-  }
-  const uuid = localStorage.getItem("uuid")
+  const [uuid, setuuid] = useState<string>("");
+
+  useEffect(() => {
+    // Check if UUID exists in localStorage
+    let storeduuid = localStorage.getItem("uuid");
+
+    if (!storeduuid) {
+      // Generate new UUID and store it
+      storeduuid = crypto.randomUUID();
+      localStorage.setItem("uuid", storeduuid);
+    }
+
+    // Set UUID in state
+    setuuid(storeduuid);
+  }, []);
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +72,7 @@ function ChatContent() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
+
   const saveToFirebase = (question: string, aiAnswer: string) => {
     const timestamp = new Date().toLocaleString("en-US", {
       year: "numeric",
@@ -75,6 +88,7 @@ function ChatContent() {
       console.error("Error saving data to Firebase:", error)
     );
   };
+
   const fetchGroqAnswer = async (question: string): Promise<string> => {
     const prompt = `
       Your task is to provide the most accurate answer to the following question.
@@ -84,6 +98,7 @@ function ChatContent() {
     `;
     return await callAI(prompt);
   };
+
   const callAI = async (prompt: string): Promise<string> => {
     const apiKey = "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"; // Use environment variable
     if (!apiKey) {
