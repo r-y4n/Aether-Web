@@ -40,9 +40,47 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
-export default function Index() {
+// Client-side component to prevent hydration mismatch related to the theme.
+function ClientSideThemeSwitcher({ children }) {
   const { theme, setTheme } = useTheme();
+  return (
+    <>
+      <div className="fixed bottom-4 left-4"> {/* Positioning */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Sun
+                className={`h-[1.2rem] w-[1.2rem] transition-transform ${
+                  theme === "dark" ? "-rotate-90" : "rotate-0"
+                }`}
+              />
+              <Moon
+                className={`absolute h-[1.2rem] w-[1.2rem] transition-transform ${
+                  theme === "dark" ? "rotate-0" : "rotate-90"
+                }`}
+              />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setTheme("light")}>
+              Light
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>
+              Dark
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+              System
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      {children}
+    </>
+  );
+}
 
+export default function Index() {
   const releaseNotes = [
     {
       version: "Initial Release",
@@ -76,37 +114,9 @@ export default function Index() {
         <Analytics />
         <div className="flex min-h-screen">
           <AppSidebar>
-            {/* Theme Toggle moved to the bottom of the sidebar */}
-            <div className="fixed bottom-4 left-4">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Sun
-                      className={`h-[1.2rem] w-[1.2rem] transition-transform ${
-                        theme === "dark" ? "-rotate-90" : "rotate-0"
-                      }`}
-                    />
-                    <Moon
-                      className={`absolute h-[1.2rem] w-[1.2rem] transition-transform ${
-                        theme === "dark" ? "rotate-0" : "rotate-90"
-                      }`}
-                    />
-                    <span className="sr-only">Toggle theme</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            {/* Wrap the theme switcher in the ClientSideThemeSwitcher component */}
+            <ClientSideThemeSwitcher>
+            </ClientSideThemeSwitcher>
           </AppSidebar>
           <SidebarInset className="flex-grow">
             <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
