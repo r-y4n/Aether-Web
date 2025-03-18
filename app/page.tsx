@@ -1,15 +1,18 @@
+"use client"
+
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AnswerRightInfoSection } from "@/components/info-section"
 import {Chrome, Bot} from "lucide-react"
+import { ThemeProvider } from "@/components/theme-provider"
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
 } from "@/components/ui/breadcrumb"
-
+import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button"
 import {
   Popover,
@@ -18,7 +21,8 @@ import {
 } from "@/components/ui/popover"
 import Link from 'next/link'
 import { ScrollArea } from "@/components/ui/scroll-area"
-
+import { Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
 import {
   Card,
   CardContent,
@@ -27,7 +31,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -36,11 +45,40 @@ import {
 } from "@/components/ui/sidebar"
 
 export default function Index() {
+  const { setTheme } = useTheme()
   return (
-    <SidebarProvider>
+    <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+    <SidebarProvider suppressHydrationWarning>
       <SpeedInsights />
       <Analytics />
-      <AppSidebar />
+      <AppSidebar className="display-flex">
+      <DropdownMenu>
+      <DropdownMenuTrigger className="absolute inset-x-0 bottom-0" asChild>
+        <Button variant="outline" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+
+        </AppSidebar>
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
@@ -209,6 +247,7 @@ Our Chrome Extension to help find answers to selected questions online
         </CardFooter>
       </Card>
     </SidebarProvider>
+    </ThemeProvider>
 )
 
 }
