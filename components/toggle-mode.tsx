@@ -13,7 +13,7 @@ import {
 type Theme = "light" | "dark" | "system";
 
 export function ModeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
 
   React.useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
@@ -22,11 +22,20 @@ export function ModeToggle() {
     }
   }, [setTheme]);
 
+  React.useEffect(() => {
+    const handleStorageChange = () => {
+      const newTheme = localStorage.getItem('theme');
+      if (newTheme) {
+        setTheme(newTheme);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [setTheme]);
 
   const handleThemeChange = (newTheme: Theme) => {
     localStorage.setItem("theme", newTheme);
-    // Force a re-render to reflect theme change
-    window.location.reload();
   };
 
   return (
@@ -52,4 +61,3 @@ export function ModeToggle() {
     </DropdownMenu>
   );
 }
-
