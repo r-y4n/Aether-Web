@@ -2,9 +2,9 @@
 
 import { ClerkProvider, useAuth } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
-import { ConvexProvider, ConvexReactClient } from 'convex/react'
+import { ConvexReactClient } from 'convex/react'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
-import { ThemeProvider, useTheme } from 'next-themes'
+import { useTheme } from 'next-themes'
 import { ReactNode, useEffect } from 'react'
 
 const convex = new ConvexReactClient("https://bright-wildebeest-803.convex.cloud")

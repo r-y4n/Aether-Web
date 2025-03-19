@@ -5,14 +5,12 @@ import { Analytics } from "@vercel/analytics/react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AnswerRightInfoSection } from "@/components/info-section"
 import {Chrome, Bot} from "lucide-react"
-import { ThemeProvider } from "@/components/theme-provider"
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
 } from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button"
 import {
   Popover,
@@ -21,8 +19,6 @@ import {
 } from "@/components/ui/popover"
 import Link from 'next/link'
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
 import {
   Card,
   CardContent,
@@ -31,12 +27,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
