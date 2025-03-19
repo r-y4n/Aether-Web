@@ -10,35 +10,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+type Theme = "light" | "dark" | "system";
+
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();
 
   React.useEffect(() => {
-    // Load theme from localStorage on component mount
     const storedTheme = localStorage.getItem("theme");
     if (storedTheme) {
       setTheme(storedTheme);
     }
   }, [setTheme]);
 
-  const handleThemeChange = (newTheme) => {
-    switch (newTheme) {
-      case "light":
-        setTheme("light");
-        localStorage.setItem("theme", "light");
-        break;
-      case "dark":
-        setTheme("dark");
-        localStorage.setItem("theme", "dark");
-        break;
-      case "system":
-        setTheme("system");
-        localStorage.setItem("theme", "system");
-        break;
-      default:
-        // Handle invalid theme selection (optional)
-        console.warn("Invalid theme selected:", newTheme);
-    }
+
+  const handleThemeChange = (newTheme: Theme) => {
+    localStorage.setItem("theme", newTheme);
+    // Force a re-render to reflect theme change
+    window.location.reload();
   };
 
   return (
@@ -64,3 +52,4 @@ export function ModeToggle() {
     </DropdownMenu>
   );
 }
+
