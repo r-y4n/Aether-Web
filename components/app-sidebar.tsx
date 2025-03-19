@@ -11,7 +11,8 @@ import { NavMain } from "@/components/nav-main"
 import {
   Sidebar,
   SidebarContent,
-  SidebarRail
+  SidebarRail,
+  SidebarFooter
 } from "@/components/ui/sidebar"
 
 // This is sample data.
