@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import {ThemeProvider} from "next-themes";
+import {useThemeContext} from "@/components/ThemeContext"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,18 +20,22 @@ export const metadata: Metadata = {
   keywords: "answerright, chrome, extension, chrome extension, ai extension for school, chrome extension for school, ai answers, answers for homework, homework help, ai answers for school, school help, game websites, free games online, games, free, artificial intelligence, schoolwork answers, answer, answers, schoolwork, homework, easy, help"
 };
 
-export default function RootLayout({
+export default function RootLayout({  
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}
+>) {
+  const { theme } = useThemeContext();
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
+        <div className={theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'} >
         {children}
+        </div>
         </ThemeProvider>
       </body>
     </html>

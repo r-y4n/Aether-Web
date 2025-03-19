@@ -1,6 +1,6 @@
+// components/ModeToggle.tsx
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,23 +9,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useThemeContext } from "@/components/ThemeContext";
 
 type Theme = "light" | "dark" | "system";
 
 export function ModeToggle() {
-  const { setTheme } = useTheme();
-
-  React.useEffect(() => {
-    // Load theme from localStorage on component mount
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme) {
-      setTheme(storedTheme as Theme);
-    }
-  }, [setTheme]);
+  const { theme, setTheme } = useThemeContext();
 
   const handleThemeChange = (newTheme: Theme) => {
-    setTheme(newTheme); // Update next-themes state
-    localStorage.setItem("theme", newTheme); // Persist to localStorage
+    setTheme(newTheme);
   };
 
   return (
