@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { ModeToggle } from "@/components/toggle-mode"
 import {
   Bot,
   SquareTerminal
@@ -60,6 +61,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
+      <SidebarFooter>
+        <ModeToggle />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   )
