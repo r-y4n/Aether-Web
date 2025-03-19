@@ -1,5 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { AnswerRightInfoSection } from "@/components/info-section"
+import {ThemeProvider} from "next-themes";
+import { Providers } from '@/components/providers'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,6 +18,8 @@ import {
 
 export default function About() {
   return (
+    <ThemeProvider>
+      <Providers>
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
@@ -39,5 +43,7 @@ export default function About() {
         <AnswerRightInfoSection />
       </SidebarInset>
     </SidebarProvider>
+    </Providers>
+    </ThemeProvider>
   )
 }

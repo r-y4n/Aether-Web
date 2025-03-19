@@ -1,4 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
+import {ThemeProvider} from "next-themes";
+import { Providers } from '@/components/providers'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,6 +24,8 @@ import {
 
 export default function Changelog() {
   return (
+    <ThemeProvider>
+      <Providers>
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
@@ -65,6 +69,7 @@ export default function Changelog() {
       </Card>
       </SidebarInset>
     </SidebarProvider>
-    
+    </Providers>
+    </ThemeProvider>
   )
 }

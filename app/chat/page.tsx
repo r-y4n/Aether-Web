@@ -1,7 +1,8 @@
 "use client"
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
+import {ThemeProvider} from "next-themes";
+import { Providers } from '@/components/providers'
 import { useState, useRef, useEffect } from "react";
 // Firebase
 import { initializeApp } from "firebase/app";
@@ -222,5 +223,11 @@ function ChatContent() {
 }
 
 export default function Chat() {
-  return <SidebarProvider><AppSidebar /><ChatContent /></SidebarProvider>;
+  return <ThemeProvider
+  attribute="class"
+  storageKey="theme"
+  enableSystem
+  disableTransitionOnChange
+>
+  <Providers><SidebarProvider><AppSidebar /><ChatContent /></SidebarProvider></Providers></ThemeProvider>;
 }

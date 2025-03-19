@@ -1,5 +1,5 @@
 
-import { ModeToggle }from "@/components/ModeToggle"
+import { ModeToggle }from "@/components/mode-toggle"
 import * as React from "react"
 import {
   Bot,
@@ -62,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <ModeToggle/>
+        <ModeToggle />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
