@@ -13,29 +13,19 @@ import {
 type Theme = "light" | "dark" | "system";
 
 export function ModeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme } = useTheme();
 
   React.useEffect(() => {
+    // Load theme from localStorage on component mount
     const storedTheme = localStorage.getItem("theme");
     if (storedTheme) {
-      setTheme(storedTheme);
+      setTheme(storedTheme as Theme);
     }
   }, [setTheme]);
 
-  React.useEffect(() => {
-    const handleStorageChange = () => {
-      const newTheme = localStorage.getItem('theme');
-      if (newTheme) {
-        setTheme(newTheme);
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, [setTheme]);
-
   const handleThemeChange = (newTheme: Theme) => {
-    localStorage.setItem("theme", newTheme);
+    setTheme(newTheme); // Update next-themes state
+    localStorage.setItem("theme", newTheme); // Persist to localStorage
   };
 
   return (
