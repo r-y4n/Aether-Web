@@ -23,6 +23,7 @@ import Link from 'next/link'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
+import dynamic from "next/dynamic"
 import {
   Card,
   CardContent,
@@ -53,6 +54,7 @@ export default function Index() {
             enableSystem
             disableTransitionOnChange
           >
+          <NoSSR />
     <SidebarProvider suppressHydrationWarning>
       <SpeedInsights />
       <Analytics />
