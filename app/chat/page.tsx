@@ -92,7 +92,7 @@ function ChatContent() {
 
   const fetchGroqAnswer = async (question: string): Promise<string> => {
     const prompt = `
-    You are an AI chatbot built by AnswerRight to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers.
+    You are an AI chatbot built by Aether to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers.
       Your task is to provide the most accurate answer to the following question.
       Answer concisely and accurately, saying only the answer.
 
