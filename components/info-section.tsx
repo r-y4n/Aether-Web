@@ -17,7 +17,7 @@ export function AetherInfoSection() {
           AI-Powered Study Assistant
         </Badge>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-          Meet <span className="text-primary">AnswerRight</span>
+          Meet <span className="text-primary">Aether</span>
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mb-8">
           Your AI study companion that helps you learn faster, remember longer, and ace your exams with confidence.
@@ -49,7 +49,7 @@ export function AetherInfoSection() {
             </CardHeader>
             <CardContent>
               <p>
-                AnswerRight uses advanced AI to understand how you learn best, then tailors its approach to match your
+                Aether uses advanced AI to understand how you learn best, then tailors its approach to match your
                 cognitive style, making studying more efficient.
               </p>
             </CardContent>
@@ -63,7 +63,7 @@ export function AetherInfoSection() {
             </CardHeader>
             <CardContent>
               <p>
-                Simply upload your question by right-clicking selected text and AnswerRight will generate targeted
+                Simply upload your question by right-clicking selected text and Aether will generate targeted
                 answers to test your knowledge and reinforce learning.
               </p>
             </CardContent>
@@ -102,7 +102,7 @@ export function AetherInfoSection() {
               <div className="w-full md:w-1/2">
                 <h3 className="text-xl font-semibold mb-2">1. Add to Chrome</h3>
                 <p className="text-muted-foreground mb-4">
-                  Install AnswerRight from the Chrome Web Store with just one click. The extension integrates seamlessly
+                  Install Aether from the Chrome Web Store with just one click. The extension integrates seamlessly
                   with your browser.
                 </p>
                 <ul className="space-y-2">
@@ -124,7 +124,7 @@ export function AetherInfoSection() {
               <div className="w-full md:w-1/2">
                 <h3 className="text-xl font-semibold mb-2">2. Select the Text</h3>
                 <p className="text-muted-foreground mb-4">
-                  Highlight text, right-click on it, and select AnswerRight to send the question to the AI for an answer.
+                  Highlight text, right-click on it, and select Aether to send the question to the AI for an answer.
                 </p>
                 <ul className="space-y-2">
                   {["Quick", "Simple", "Secure and private"].map(
@@ -147,7 +147,7 @@ export function AetherInfoSection() {
               <div className="w-full md:w-1/2">
                 <h3 className="text-xl font-semibold mb-2">3. Learn Effectively</h3>
                 <p className="text-muted-foreground mb-4">
-                  AnswerRight analyzes your materials and creates personalized quizzes, flashcards, and study guides
+                  Aether analyzes your materials and creates personalized quizzes, flashcards, and study guides
                   tailored to your learning style.
                 </p>
                 <ul className="space-y-2">
@@ -174,7 +174,7 @@ export function AetherInfoSection() {
               role: "Computer Science Student",
               image: "/placeholder.svg?height=40&width=40",
               quote:
-                "AnswerRight helped me prepare for my algorithms exam in half the time. The answers provided were spot on!",
+                "Aether helped me prepare for my algorithms exam in half the time. The answers provided were spot on!",
             },
             {
               name: "Sarah Chen",
@@ -188,7 +188,7 @@ export function AetherInfoSection() {
               role: "Law Student",
               image: "/placeholder.svg?height=40&width=40",
               quote:
-                "The way AnswerRight identifies gaps in my knowledge has dramatically improved my case study analyses.",
+                "The way Aether identifies gaps in my knowledge has dramatically improved my case study analyses.",
             },
           ].map((testimonial, i) => (
             <Card key={i}>
@@ -229,7 +229,7 @@ export function AetherInfoSection() {
           <Button asChild size="lg" className="gap-2">
             <Link href="https://chromewebstore.google.com/detail/answerright/gnlldhbpjicjidknchpfgmacdeclcdfj">
               <Bot className="h-5 w-5" />
-              Get AnswerRight Now
+              Get Aether Now
             </Link>
           </Button>
         </CardContent>
@@ -246,20 +246,20 @@ export function AetherInfoSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {[
             {
-              q: "Is AnswerRight free to use?",
-              a: "Yes, AnswerRight is completely free for students.",
+              q: "Is Aether free to use?",
+              a: "Yes, Aether is completely free for students.",
             },
             {
-              q: "How does AnswerRight protect my privacy?",
+              q: "How does Aether protect my privacy?",
               a: "Your study materials and data never leave your device. All AI processing happens locally, ensuring your information stays private.",
             },
             {
               q: "Does it work with all subjects?",
-              a: "Yes! AnswerRight works with any subject matter, from STEM fields to humanities, languages, and professional certifications.",
+              a: "Yes! Aether works with any subject matter, from STEM fields to humanities, languages, and professional certifications.",
             },
             {
               q: "Can I use it offline?",
-              a: "Absolutely. Once installed, AnswerRight's core features work without an internet connection.",
+              a: "Absolutely. Once installed, Aether's core features work without an internet connection.",
             },
           ].map((faq, i) => (
             <Card key={i}>
