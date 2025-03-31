@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { AnswerRightInfoSection } from "@/components/info-section"
+import { AetherInfoSection } from "@/components/info-section"
 import {ThemeProvider} from "next-themes";
 import { Providers } from '@/components/providers'
 import {
@@ -40,7 +40,7 @@ export default function About() {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-        <AnswerRightInfoSection />
+        <AetherInfoSection />
       </SidebarInset>
     </SidebarProvider>
     </Providers>
