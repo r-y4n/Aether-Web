@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 
-export function AnswerRightInfoSection() {
+export function AetherInfoSection() {
   return (
     <section className="container mx-auto py-12 px-4 md:px-6">
       {/* Hero Section */}
