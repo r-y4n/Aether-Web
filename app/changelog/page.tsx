@@ -49,21 +49,21 @@ export default function Changelog() {
         <Card>
         <CardHeader>
         <CardTitle>Changelog</CardTitle>
-        <CardDescription>All of our secure releases of AnswerRight.</CardDescription>
+        <CardDescription>All of our secure releases of Aether.</CardDescription>
         <Separator className="my-2" />
         </CardHeader>
         <CardContent>
         <CardTitle>v1.0.0</CardTitle>
-        <CardDescription>Initial release of AnswerRight.</CardDescription>
+        <CardDescription>Initial release of Aether.</CardDescription>
         <Separator className="my-2" />
         <CardTitle>v1.0.3</CardTitle>
         <CardDescription>Bug fixes, QOL Updates</CardDescription>
         <Separator className="my-2" />
         <CardTitle>v1.0.4</CardTitle>
-        <CardDescription>Update to help AnswerRight use DOM elements to find possible answers for selected questions, Efficiency updates.</CardDescription>
+        <CardDescription>Update to help Aether use DOM elements to find possible answers for selected questions, Efficiency updates.</CardDescription>
         <Separator className="my-2" />
         <CardTitle>v1.1.1</CardTitle>
-        <CardDescription>Update to help AnswerRight use databases to learn off of previous questions anonymously.</CardDescription>
+        <CardDescription>Update to help Aether use databases to learn off of previous questions anonymously.</CardDescription>
         <Separator className="my-2" />
         </CardContent>
       </Card>
