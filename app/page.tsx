@@ -3,7 +3,7 @@
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
 import { AppSidebar } from "@/components/app-sidebar"
-import { AnswerRightInfoSection } from "@/components/info-section"
+import { AetherInfoSection } from "@/components/info-section"
 import {Chrome, Bot} from "lucide-react"
 import {
   Breadcrumb,
@@ -59,7 +59,7 @@ export default function Index() {
         <div className="flex w-[60vw] gap-4">
         <Card className="flex-none">
           <CardHeader>
-            <CardTitle>AnswerRight Web</CardTitle>
+            <CardTitle>Aether Web</CardTitle>
             <CardDescription>Chat with our AI on our new Webapp.</CardDescription>
           </CardHeader>
           <CardContent>
@@ -72,7 +72,7 @@ export default function Index() {
         <Card className="flex-1 hidden md:block">
           <CardHeader>
             <CardTitle>
-AnswerRight Web Extension
+Aether Web Extension
 </CardTitle>
           <CardDescription>
 Our Chrome Extension to help find answers to selected questions online
@@ -90,7 +90,7 @@ Our Chrome Extension to help find answers to selected questions online
         <br />
 
         <Card>
-        <AnswerRightInfoSection />
+        <AetherInfoSection />
         </Card>
       </SidebarInset>
       <Card className="hidden md:block">
@@ -119,7 +119,7 @@ Our Chrome Extension to help find answers to selected questions online
           </CardHeader>
           <CardDescription>
                   <div className="p-4">
-            Initial Release of AnswerRight.
+            Initial Release of Aether.
             </div>
           </CardDescription>
         </Card>
@@ -155,7 +155,7 @@ Our Chrome Extension to help find answers to selected questions online
           </CardHeader>
           <CardDescription>
                   <div className="p-4">
-            An update that brings context to AnswerRight, taking DOM elements and recording them as possible answers for the selected question.
+            An update that brings context to Aether, taking DOM elements and recording them as possible answers for the selected question.
             </div>
           </CardDescription>
         </Card>
@@ -173,7 +173,7 @@ Our Chrome Extension to help find answers to selected questions online
           </CardHeader>
           <CardDescription>
                   <div className="p-4">
-            A Major update that helped AnswerRight create more accurate answers by recording past answers in a Database and learning from them.
+            A Major update that helped Aether create more accurate answers by recording past answers in a Database and learning from them.
             </div>
           </CardDescription>
         </Card>
