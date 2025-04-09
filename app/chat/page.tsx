@@ -94,8 +94,8 @@ function ChatContent() {
     const prompt = `
     You are an AI chatbot built by Aether to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers.
       Your task is to provide the most accurate answer to the following question.
-      Answer concisely and accurately, saying only the answer.
-
+      Answer concisely and accurately, saying only the answer. Strive to not be repetitive. If you do not have enough information, do not guess.
+ 
       Question: "${question}"
     `;
     return await callAI(prompt);
