@@ -91,13 +91,7 @@ function ChatContent() {
   };
 
   const fetchGroqAnswer = async (question: string): Promise<string> => {
-    const prompt = `
-    You are an AI chatbot built by Aether to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers.
-      Your task is to provide the most accurate answer to the following question.
-      Answer concisely and accurately, saying only the answer. Strive to not be repetitive. If you do not have enough information, do not guess.
- 
-      Question: "${question}"
-    `;
+    const prompt =  question
     return await callAI(prompt);
   };
 
@@ -110,9 +104,14 @@ function ChatContent() {
 
     const url = "https://api.groq.com/openai/v1/chat/completions";
     const data = {
-      messages: [{ role: "user", content: prompt }],
-      model: "llama-3.3-70b-specdec",
-      max_tokens: 150,
+      messages: 
+      [
+        { role: "system", content: "You are an AI chatbot built by Aether, a small company that wants to help students and researchers alike find answers to questions, to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers. Your task is to provide the most accurate answer to the following question. Answer concisely and accurately, saying only the answer. Strive to not be repetitive. If you do not have enough information, do not guess."},
+        { role: "user", content: prompt }
+
+      ],
+      model: "meta-llama/llama-4-scout-17b-16e-instruct",
+      max_tokens: 250,
       top_p: 0.3,
       stream: false,
     };
