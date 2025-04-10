@@ -59,8 +59,8 @@ export default function Index() {
         <br></br>
         <section>
         <div className="flex w-[60vw] gap-4">
-        <Card className="flex-none">
-          <CardHeader>
+        <Card className="flex-none p-2 shadow-lg">
+          <CardHeader className="p-4">
             <CardTitle>Aether Web</CardTitle>
             <CardDescription>Chat with our AI on our new Webapp.</CardDescription>
           </CardHeader>
@@ -71,13 +71,13 @@ export default function Index() {
             <br />
           </CardFooter>
         </Card>
-        <Card className="flex-1 hidden md:block">
-          <CardHeader>
+        <Card className="flex-1 hidden md:block p-2 shadow-lg">
+          <CardHeader className="p-4">
             <CardTitle>
 Aether Web Extension
 </CardTitle>
           <CardDescription>
-Our Chrome Extension to help find answers to selected questions online
+Our Chrome Extension helps find answers to selected questions online
           </CardDescription>
           </CardHeader>
           <br />
