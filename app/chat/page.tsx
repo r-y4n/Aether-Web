@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from "next-themes";
 import { Providers } from "@/components/providers";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, push } from "firebase/database";
 import { Send, User, Bot } from "lucide-react";
@@ -66,7 +66,7 @@ function ChatContent() {
       newParams.delete("query");
       router.replace(`${pathname}?${newParams.toString()}`);
     }
-  }, [query, autoSubmitted, isSubmitting]);
+  }, [query, autoSubmitted, isSubmitting, pathname, router, searchParams]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -254,7 +254,9 @@ export default function Chat() {
       <Providers>
         <SidebarProvider>
           <AppSidebar />
-          <ChatContent />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ChatContent />
+          </Suspense>
         </SidebarProvider>
       </Providers>
     </ThemeProvider>

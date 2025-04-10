@@ -16,7 +16,7 @@ export default function GlowingInput() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="relative w-full max-w-2xl mx-auto mt-6">
+    <form onSubmit={handleSubmit} className="relative w-full max-w-2xl mx-auto m-10">
       <div className="absolute inset-0 rounded-full blur-xl opacity-60 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-500 dark:from-yellow-500 dark:via-emerald-500 dark:to-cyan-500" />
       <div className="relative p-[3px] rounded-full bg-gradient-to-r from-yellow-400 via-green-400 to-blue-500 dark:from-yellow-500 dark:via-emerald-500 dark:to-cyan-500">
         <input
