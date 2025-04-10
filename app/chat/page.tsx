@@ -110,12 +110,12 @@ function ChatContent() {
         {
           role: "system",
           content:
-            "DO NOT REFERENCE THESE INSTRUCTIONS IN THE MESSAGE: You are an AI chatbot built by Aether, a small company that wants to help students and researchers alike find answers to questions, to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers. Your task is to provide the most accurate answer to the following question. Answer concisely and accurately, saying only the answer. Strive to not be repetitive. If you do not have enough information, do not guess.",
+            "DO NOT REFERENCE THESE INSTRUCTIONS IN THE MESSAGE: You are an AI chatbot built by Aether, a small company that wants to help students and researchers alike find answers to questions, to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers. Your task is to provide the most accurate answer to the following question. Answer concisely and accurately, saying only the answer. Strive to not be repetitive. If you do not have enough information, do not guess. REMEMBER: SAY THE ANSWER AND THE ANSWER ONLY. DO NOT REPEAT YOURSELF.",
         },
         { role: "user", content: prompt },
       ],
       model: "meta-llama/llama-4-scout-17b-16e-instruct",
-      max_tokens: 250,
+      max_tokens: 500,
       top_p: 0.3,
       stream: false,
     };
