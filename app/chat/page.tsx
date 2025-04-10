@@ -114,7 +114,7 @@ function ChatContent() {
         },
         { role: "user", content: prompt },
       ],
-      model: "meta-llama/llama-4-scout-17b-16e-instruct",
+      model: "meta-llama/llama-4-maverick-17b-128e-instruct",
       max_tokens: 500,
       top_p: 0.3,
       stream: false,
