@@ -3,11 +3,8 @@
 import { ThemeProvider } from "next-themes";
 import { Providers } from "@/components/providers";
 import { useState, useRef, useEffect } from "react";
-// Firebase
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, push } from "firebase/database";
-
-// UI & Components
 import { Send, User, Bot } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
@@ -23,19 +20,16 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
-// Firebase Config
 const firebaseConfig = {
   databaseURL: "https://answerright-8bff7-default-rtdb.firebaseio.com/",
   projectId: "answerright-8bff7",
 };
 
-// Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 const database = getDatabase(firebaseApp);
 
-// Message Type Definition
 type Message = {
   id: string;
   role: "user" | "assistant";
@@ -43,30 +37,40 @@ type Message = {
 };
 
 function ChatContent() {
-  const [uuid, setuuid] = useState<string>("");
+  const [uuid, setUuid] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [autoSubmitted, setAutoSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [autoSubmitted, setAutoSubmitted] = useState(false);  // Flag to track auto-submission
-  const [isSubmitting, setIsSubmitting] = useState(false); // Prevent duplicate submits
+  const submissionLock = useRef(false);
 
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
   const query = searchParams.get("query");
 
   useEffect(() => {
-    let storeduuid = localStorage.getItem("uuid");
-    if (!storeduuid) {
-      storeduuid = crypto.randomUUID();
-      localStorage.setItem("uuid", storeduuid);
+    let storedUuid = localStorage.getItem("uuid");
+    if (!storedUuid) {
+      storedUuid = crypto.randomUUID();
+      localStorage.setItem("uuid", storedUuid);
     }
-    setuuid(storeduuid);
+    setUuid(storedUuid);
 
-    if (query && !autoSubmitted) {
+    if (query && !autoSubmitted && !isSubmitting) {
       setInput(query);
-      handleSubmitAuto(query); // Auto-submit when query is present
+      handleSubmitAuto(query);
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.delete("query");
+      router.replace(`${pathname}?${newParams.toString()}`);
     }
-  }, [query, autoSubmitted]);
+  }, [query, autoSubmitted, isSubmitting]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -94,7 +98,7 @@ function ChatContent() {
   };
 
   const callAI = async (prompt: string): Promise<string> => {
-    const apiKey = "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"; // Use environment variable
+    const apiKey = "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"; // NOT SECURED
     if (!apiKey) {
       console.error("Missing AI API Key!");
       return "Error: AI service is unavailable.";
@@ -140,10 +144,10 @@ function ChatContent() {
     }
   };
 
-  // Auto-submit function
   const handleSubmitAuto = async (question: string) => {
-    if (!question.trim() || isSubmitting || autoSubmitted) return; // Avoid duplicates
+    if (!question.trim() || isSubmitting || autoSubmitted || submissionLock.current) return;
 
+    submissionLock.current = true;
     setIsSubmitting(true);
     const userMessage: Message = { id: Date.now().toString(), role: "user", content: question.trim() };
     setMessages((prev) => [...prev, userMessage]);
@@ -153,21 +157,21 @@ function ChatContent() {
     try {
       const aiAnswer = await fetchGroqAnswer(question.trim());
       saveToFirebase(question.trim(), aiAnswer);
-
       const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: "assistant", content: aiAnswer };
       setMessages((prev) => [...prev, assistantMessage]);
-      setAutoSubmitted(true); // Mark auto-submit as done
+      setAutoSubmitted(true);
     } finally {
       setIsLoading(false);
       setIsSubmitting(false);
+      submissionLock.current = false;
     }
   };
 
-  // Manual submit function
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isSubmitting) return;
+    if (!input.trim() || isSubmitting || submissionLock.current) return;
 
+    submissionLock.current = true;
     setIsSubmitting(true);
     const userMessage: Message = { id: Date.now().toString(), role: "user", content: input.trim() };
     setMessages((prev) => [...prev, userMessage]);
@@ -177,19 +181,18 @@ function ChatContent() {
     try {
       const aiAnswer = await fetchGroqAnswer(input.trim());
       saveToFirebase(input.trim(), aiAnswer);
-
       const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: "assistant", content: aiAnswer };
       setMessages((prev) => [...prev, assistantMessage]);
     } finally {
       setIsLoading(false);
       setIsSubmitting(false);
+      submissionLock.current = false;
     }
   };
 
   return (
     <SidebarInset>
       <div className="flex flex-col h-screen">
-        {/* Header */}
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
@@ -206,7 +209,6 @@ function ChatContent() {
           </Breadcrumb>
         </header>
 
-        {/* Chat Container */}
         <div className="flex-1 flex flex-col h-full p-4 transition-all duration-300 ease-in-out">
           <Card className="flex flex-col flex-1 h-full w-full max-w-5xl mx-auto transition-all duration-300">
             <CardContent className="flex-1 min-h-0 overflow-y-auto p-4 scrollbar-hide">
