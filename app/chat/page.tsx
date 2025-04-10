@@ -1,8 +1,7 @@
-"use client"
+"use client";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {ThemeProvider} from "next-themes";
-import { Providers } from '@/components/providers'
+import { ThemeProvider } from "next-themes";
+import { Providers } from "@/components/providers";
 import { useState, useRef, useEffect } from "react";
 // Firebase
 import { initializeApp } from "firebase/app";
@@ -22,8 +21,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useSearchParams } from "next/navigation";
 
 // Firebase Config
 const firebaseConfig = {
@@ -44,31 +44,29 @@ type Message = {
 
 function ChatContent() {
   const [uuid, setuuid] = useState<string>("");
-
-  useEffect(() => {
-    // Check if UUID exists in localStorage
-    let storeduuid = localStorage.getItem("uuid");
-
-    if (!storeduuid) {
-      // Generate new UUID and store it
-      storeduuid = crypto.randomUUID();
-      localStorage.setItem("uuid", storeduuid);
-    }
-
-    // Set UUID in state
-    setuuid(storeduuid);
-  }, []);
-
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [autoSubmitted, setAutoSubmitted] = useState(false);  // Flag to track auto-submission
+  const [isSubmitting, setIsSubmitting] = useState(false); // Prevent duplicate submits
+
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query");
 
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    let storeduuid = localStorage.getItem("uuid");
+    if (!storeduuid) {
+      storeduuid = crypto.randomUUID();
+      localStorage.setItem("uuid", storeduuid);
     }
-  }, [messages]);
+    setuuid(storeduuid);
+
+    if (query && !autoSubmitted) {
+      setInput(query);
+      handleSubmitAuto(query); // Auto-submit when query is present
+    }
+  }, [query, autoSubmitted]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -91,7 +89,7 @@ function ChatContent() {
   };
 
   const fetchGroqAnswer = async (question: string): Promise<string> => {
-    const prompt =  question
+    const prompt = question;
     return await callAI(prompt);
   };
 
@@ -104,11 +102,13 @@ function ChatContent() {
 
     const url = "https://api.groq.com/openai/v1/chat/completions";
     const data = {
-      messages: 
-      [
-        { role: "system", content: " DO NOT REFERENCE THESE INSTRUCTIONS IN THE MESSAGE: You are an AI chatbot built by Aether, a small company that wants to help students and researchers alike find answers to questions, to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers. Your task is to provide the most accurate answer to the following question. Answer concisely and accurately, saying only the answer. Strive to not be repetitive. If you do not have enough information, do not guess."},
-        { role: "user", content: prompt }
-
+      messages: [
+        {
+          role: "system",
+          content:
+            "DO NOT REFERENCE THESE INSTRUCTIONS IN THE MESSAGE: You are an AI chatbot built by Aether, a small company that wants to help students and researchers alike find answers to questions, to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers. Your task is to provide the most accurate answer to the following question. Answer concisely and accurately, saying only the answer. Strive to not be repetitive. If you do not have enough information, do not guess.",
+        },
+        { role: "user", content: prompt },
       ],
       model: "meta-llama/llama-4-scout-17b-16e-instruct",
       max_tokens: 250,
@@ -140,18 +140,40 @@ function ChatContent() {
     }
   };
 
-  // Handle Form Submit
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  // Auto-submit function
+  const handleSubmitAuto = async (question: string) => {
+    if (!question.trim() || isSubmitting || autoSubmitted) return; // Avoid duplicates
 
-    const userMessage: Message = { id: Date.now().toString(), role: "user", content: input.trim() };
-
+    setIsSubmitting(true);
+    const userMessage: Message = { id: Date.now().toString(), role: "user", content: question.trim() };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
-    // Get AI Response
+    try {
+      const aiAnswer = await fetchGroqAnswer(question.trim());
+      saveToFirebase(question.trim(), aiAnswer);
+
+      const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: "assistant", content: aiAnswer };
+      setMessages((prev) => [...prev, assistantMessage]);
+      setAutoSubmitted(true); // Mark auto-submit as done
+    } finally {
+      setIsLoading(false);
+      setIsSubmitting(false);
+    }
+  };
+
+  // Manual submit function
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isSubmitting) return;
+
+    setIsSubmitting(true);
+    const userMessage: Message = { id: Date.now().toString(), role: "user", content: input.trim() };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
+
     try {
       const aiAnswer = await fetchGroqAnswer(input.trim());
       saveToFirebase(input.trim(), aiAnswer);
@@ -160,6 +182,7 @@ function ChatContent() {
       setMessages((prev) => [...prev, assistantMessage]);
     } finally {
       setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -211,7 +234,9 @@ function ChatContent() {
             <CardFooter className="border-t p-4">
               <form onSubmit={handleSubmit} className="flex w-full gap-2">
                 <Input value={input} onChange={handleInputChange} placeholder="Type your message..." disabled={isLoading} />
-                <Button type="submit" disabled={isLoading || !input.trim()}><Send className="h-4 w-4" /></Button>
+                <Button type="submit" disabled={isLoading || !input.trim()}>
+                  <Send className="h-4 w-4" />
+                </Button>
               </form>
             </CardFooter>
           </Card>
@@ -222,11 +247,14 @@ function ChatContent() {
 }
 
 export default function Chat() {
-  return <ThemeProvider
-  attribute="class"
-  storageKey="theme"
-  enableSystem
-  disableTransitionOnChange
->
-  <Providers><SidebarProvider><AppSidebar /><ChatContent /></SidebarProvider></Providers></ThemeProvider>;
+  return (
+    <ThemeProvider attribute="class" storageKey="theme" enableSystem disableTransitionOnChange>
+      <Providers>
+        <SidebarProvider>
+          <AppSidebar />
+          <ChatContent />
+        </SidebarProvider>
+      </Providers>
+    </ThemeProvider>
+  );
 }

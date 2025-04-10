@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AetherInfoSection } from "@/components/info-section"
 import {Chrome, Bot} from "lucide-react"
+ import GlowingInput  from "@/components/glowing-input"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -54,6 +55,7 @@ export default function Index() {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
+        <GlowingInput />
         <br></br>
         <section>
         <div className="flex w-[60vw] gap-4">
