@@ -222,7 +222,7 @@ function ChatContent() {
                     <div key={message.id} className={`flex w-full ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                       <div className={`chat-bubble ${message.role === "user" ? "user-message" : "ai-message"}`}>
                         <Avatar className={message.role === "user" ? "bg-primary" : "bg-muted"}>
-                          <AvatarFallback>{message.role === "user" ? <User size={18} /> : <Bot size={18} />}</AvatarFallback>
+                          <AvatarFallback>{message.role === "user" ? <User size={18} color="lightblue" /> : <Bot size={18} />}</AvatarFallback>
                         </Avatar>
                         <div className="message-content">{message.content}</div>
                       </div>

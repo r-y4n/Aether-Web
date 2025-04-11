@@ -58,20 +58,20 @@ export default function Index() {
         <GlowingInput />
         <br></br>
         <section>
-        <div className="flex w-[60vw] gap-4">
-        <Card className="flex-none p-2 shadow-lg">
+        <div className="flex w-{96vw} gap-4">
+        <Card className="flex-none p-2 m-2 shadow-lg w-max">
           <CardHeader className="p-4">
-            <CardTitle>Aether Web</CardTitle>
+            <CardTitle>Aether Assistant</CardTitle>
             <CardDescription>Chat with our AI on our new Webapp.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Link href="/chat" className={buttonVariants({ variant: "outline" })}><Bot />Send a Message!</Link>
+            <Link href="/chat" className={buttonVariants({ variant: "outline" })}><Bot color= "lightblue" />Send a Message!</Link>
           </CardContent>
           <CardFooter className="flex justify-between">
             <br />
           </CardFooter>
         </Card>
-        <Card className="flex-1 hidden md:block p-2 shadow-lg">
+        <Card className="flex-1 hidden md:block p-2 m-2 shadow-lg">
           <CardHeader className="p-4">
             <CardTitle>
 Aether Web Extension
@@ -82,7 +82,7 @@ Our Chrome Extension helps find answers to selected questions online
           </CardHeader>
           <br />
           <CardContent>
-<Link href="https://chromewebstore.google.com/detail/answerright/gnlldhbpjicjidknchpfgmacdeclcdfj" className={buttonVariants({ variant: "outline" })}><Chrome />Add to Chrome</Link>
+<Link href="https://chromewebstore.google.com/detail/answerright/gnlldhbpjicjidknchpfgmacdeclcdfj" className={buttonVariants({ variant: "outline" })}><Chrome color= "lightblue" />Add to Chrome</Link>
           </CardContent>
         </Card>
         </div>
