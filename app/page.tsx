@@ -58,8 +58,8 @@ export default function Index() {
         <GlowingInput />
         <br></br>
         <section>
-        <div className="flex w-{96vw} gap-4">
-        <Card className="flex-none p-2 m-2 shadow-lg w-max">
+        <div className="flex w-max container gap-4">
+        <Card className="flex-none p-2 m-2 shadow-lg sm-container">
           <CardHeader className="p-4">
             <CardTitle>Aether Assistant</CardTitle>
             <CardDescription>Chat with our AI on our new Webapp.</CardDescription>
