@@ -28,6 +28,11 @@ export default function RootLayout({
 >) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+LA:wght@100..400&display=swap');
+        </style>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
