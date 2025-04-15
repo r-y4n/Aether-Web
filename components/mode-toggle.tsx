@@ -9,9 +9,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { useEffect } from 'react'
 
 export function ModeToggle() {
-  const { setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
+
+  // Ensure the theme stored in localStorage is applied to the <html> element
+  useEffect(() => {
+    if (theme) {
+      document.documentElement.className = theme
+    }
+  }, [theme])
 
   return (
     <DropdownMenu>
@@ -28,6 +36,12 @@ export function ModeToggle() {
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('dark')}>
           Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('cyber')}>
+          Cyber
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('forest')}>
+          Forest
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('system')}>
           System

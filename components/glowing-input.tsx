@@ -24,7 +24,7 @@ export default function GlowingInput() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask anything..."
-          className="w-full rounded-full px-6 py-4 text-base font-medium focus:outline-none transition-all duration-200 bg-white text-black placeholder:text-gray-500 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-400 focus:shadow-[0px_0px_16px_8px_rgba(0,255,255,0.9)] hover:shadow-[0px_0px_32px_12px_rgba(0,255,255,0.9)] dark:focus:shadow-[0px_0px_16px_8px_rgba(0,255,255,0.9)] dark:hover:shadow-[0px_0px_32px_12px_rgba(0,255,255,0.9)]"
+          className="w-full rounded-full px-6 py-4 text-base font-medium focus:outline-none transition-all duration-200 bg-white text-black placeholder:text-gray-500 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-400 focus:shadow-[0px_0px_16px_8px_rgba(0,255,255,0.9)] hover:shadow-[0px_0px_32px_12px_rgba(0,255,255,0.9)] dark:focus:shadow-[0px_0px_16px_8px_rgba(0,255,255,0.9)] dark:hover:shadow-[0px_0px_32px_12px_rgba(0,255,255,0.9)] cyber:bg-oklch(15% 0.09 281.288)"
         />
       </div>
     </form>
