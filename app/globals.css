@@ -155,7 +155,7 @@
 --input: oklch(18.522% 0.007 17.911); /* base-200 */
 --ring: oklch(72.06% 0.191 231.6); /* info */
 
---radius: 1rem;
+--radius: 0.625rem;
 
 --sidebar: oklch(20.84% 0.008 17.911); /* base-100 */
 --sidebar-foreground: oklch(83.768% 0.001 17.911); /* base-content */
