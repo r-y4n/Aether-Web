@@ -98,13 +98,12 @@ function ChatContent() {
   };
 
   const callAI = async (prompt: string): Promise<string> => {
-    const apiKey = "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"; // NOT SECURED
-    if (!apiKey) {
-      console.error("Missing AI API Key!");
-      return "Error: AI service is unavailable.";
-    }
-
-    const url = "https://api.groq.com/openai/v1/chat/completions";
+    const primaryApiKey = "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"; // Primary API Key
+    const fallbackApiKey = "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"; // Fallback API Key
+  
+    const primaryUrl = "https://api.groq.com/openai/v1/chat/completions";
+    const fallbackUrl = "https://openrouter.ai/api/v1/chat/completions";
+  
     const data = {
       messages: [
         {
@@ -119,31 +118,60 @@ function ChatContent() {
       top_p: 0.3,
       stream: false,
     };
-
+  
     try {
-      const response = await fetch(url, {
+      // Primary API call
+      const response = await fetch(primaryUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${primaryApiKey}`,
         },
         body: JSON.stringify(data),
       });
-
+  
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error("API Error:", JSON.stringify(errorData, null, 2));
-        return "Error: Failed to fetch AI response.";
+        throw new Error("Primary API call failed");
       }
-
+  
       const jsonResponse = await response.json();
       return jsonResponse.choices[0].message.content.trim();
-    } catch (error) {
-      console.error("AI API Call Failed:", error);
-      return "Error: Unable to get response from AI.";
+    } catch (primaryError) {
+      console.error("Primary API Error:", primaryError);
+  
+      try {
+        // Fallback API call
+        const fallbackResponse = await fetch(fallbackUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${fallbackApiKey}`,
+          },
+          body: JSON.stringify({
+            model: "meta-llama/llama-4-maverick:free",
+            messages: [
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+          }),
+        });
+  
+        if (!fallbackResponse.ok) {
+          const errorData = await fallbackResponse.json();
+          console.error("Fallback API Error:", JSON.stringify(errorData, null, 2));
+          return "Error: Failed to fetch AI response from fallback API.";
+        }
+  
+        const fallbackJsonResponse = await fallbackResponse.json();
+        return fallbackJsonResponse.choices[0].message.content.trim();
+      } catch (fallbackError) {
+        console.error("Fallback API Error:", fallbackError);
+        return "Error: Both primary and fallback AI services are unavailable.";
+      }
     }
   };
-
   const handleSubmitAuto = async (question: string) => {
     if (!question.trim() || isSubmitting || autoSubmitted || submissionLock.current) return;
 
