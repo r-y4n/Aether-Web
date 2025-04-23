@@ -44,14 +44,14 @@ import {
 
 export default function Index() {
   const chartData = [
-    { month: "January", desktop: 1163 },
-    { month: "February", desktop: 476 },
-    { month: "March", desktop: 524 },
-    { month: "April", desktop: 1169 }
+    { month: "January", requests: 1163 },
+    { month: "February", requests: 476 },
+    { month: "March", requests: 524 },
+    { month: "April", requests: 1169 }
   ]
   const chartConfig = {
-    desktop: {
-      label: "Desktop",
+    requests: {
+      label: "Requests",
       color: "hsl(var(--chart-1))",
     },
   } satisfies ChartConfig
@@ -138,10 +138,10 @@ Our Chrome Extension helps find answers to selected questions online
               content={<ChartTooltipContent indicator="line" />}
             />
             <Area
-              dataKey="desktop"
+              dataKey="requests"
               type="natural"
               fill="var(--color-desktop)"
-              fillOpacity={0.4}
+              fillOpacity={0.85}
               stroke="var(--color-desktop)"
             />
           </AreaChart>
@@ -168,7 +168,7 @@ Our Chrome Extension helps find answers to selected questions online
         </Card>
         </div>
       </SidebarInset>
-      <Card className="hidden md:block">
+      <Card className="hidden">
         <CardHeader>
           <CardTitle>Announcements</CardTitle>
           <CardDescription>See our new releases, Bug Fixes, and Extension Updates!</CardDescription>
