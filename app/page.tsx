@@ -110,7 +110,7 @@ Our Chrome Extension helps find answers to selected questions online
         <ResponsiveContainer width="80%" height={500} className="m-10">
         <Card className="m-3">
       <CardHeader>
-        <CardTitle>Area Chart</CardTitle>
+        <CardTitle>Usage Chart</CardTitle>
         <CardDescription>
           Showing the total amount of AI requests in 2025
         </CardDescription>
@@ -140,9 +140,9 @@ Our Chrome Extension helps find answers to selected questions online
             <Area
               dataKey="requests"
               type="natural"
-              fill="var(--color-desktop)"
+              fill="var(--primary)"
               fillOpacity={0.85}
-              stroke="var(--color-desktop)"
+              stroke="var(--primary)"
             />
           </AreaChart>
         </ChartContainer>
