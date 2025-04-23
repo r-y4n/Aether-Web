@@ -52,7 +52,7 @@ function ChatContent() {
   const router = useRouter();
   const query = searchParams.get("query");
 
-  const geminiAI = new GoogleGenAI({ apiKey: "gemini-api-key-placeholder" }); // Replace with your actual API key
+  const geminiAI = new GoogleGenAI({ apiKey: "AIzaSyC6q7LQ_MDaD-GbfNS1MnCqdHKq8NXKCkU" });
 
   useEffect(() => {
     let storedUuid = localStorage.getItem("uuid");
@@ -168,11 +168,13 @@ function ChatContent() {
             model: "gemini-2.0-flash",
             contents: prompt,
           });
-
+          if (!geminiResponse || !geminiResponse.text) {
+            throw new Error("Tertiary Call Returned Undefined");
+          }
           return geminiResponse.text.trim();
         } catch (geminiError) {
           console.error("Google Gemini API Error:", geminiError);
-          return "Error: All AI services (primary, fallback, and Google Gemini) are unavailable.";
+          return "Error: Calls Failed, Disable any content blockers and try again.";
         }
       }
     }
