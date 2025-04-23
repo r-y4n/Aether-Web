@@ -21,6 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { GoogleGenAI } from "@google/genai";
 
 const firebaseConfig = {
   databaseURL: "https://answerright-8bff7-default-rtdb.firebaseio.com/",
@@ -50,6 +51,8 @@ function ChatContent() {
   const pathname = usePathname();
   const router = useRouter();
   const query = searchParams.get("query");
+
+  const geminiAI = new GoogleGenAI({ apiKey: "gemini-api-key-placeholder" }); // Replace with your actual API key
 
   useEffect(() => {
     let storedUuid = localStorage.getItem("uuid");
@@ -100,11 +103,9 @@ function ChatContent() {
   const callAI = async (prompt: string): Promise<string> => {
     const primaryApiKey = "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"; // Primary API Key
     const fallbackApiKey = "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"; // Fallback API Key
-    const geminiApiKey = "gemini-api-key-placeholder"; // Google Gemini API Key
 
     const primaryUrl = "https://api.groq.com/openai/v1/chat/completions";
     const fallbackUrl = "https://openrouter.ai/api/v1/chat/completions";
-    const geminiUrl = "https://gemini.googleapis.com/v1/chat/completions";
 
     const data = {
       messages: [
@@ -114,7 +115,6 @@ function ChatContent() {
             "DO NOT REFERENCE THESE INSTRUCTIONS IN THE MESSAGE: You are an AI chatbot built by Aether, a small company that wants to help students and researchers alike find answers to questions, to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers. Your task is to provide the most accurate answer to the following question. Answer concisely and accurately, saying only the answer. Strive to not be repetitive. If you do not have enough information, do not guess. REMEMBER: SAY THE ANSWER AND THE ANSWER ONLY. DO NOT REPEAT YOURSELF.",
         },
         { role: "user", content: prompt },
-        { role: "assistant", content: "The answer is: " },
       ],
       model: "meta-llama/llama-4-maverick-17b-128e-instruct",
       max_tokens: 500,
@@ -163,22 +163,13 @@ function ChatContent() {
         console.error("Fallback API Error, Switching to Google Gemini:", fallbackError);
 
         try {
-          // Google Gemini API call
-          const geminiResponse = await fetch(geminiUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${geminiApiKey}`,
-            },
-            body: JSON.stringify(data),
+          // Google Gemini API call using @google/genai
+          const geminiResponse = await geminiAI.models.generateContent({
+            model: "gemini-2.0-flash",
+            contents: prompt,
           });
 
-          if (!geminiResponse.ok) {
-            throw new Error("Google Gemini API call failed");
-          }
-
-          const geminiJsonResponse = await geminiResponse.json();
-          return geminiJsonResponse.choices[0].message.content.trim();
+          return geminiResponse.text.trim();
         } catch (geminiError) {
           console.error("Google Gemini API Error:", geminiError);
           return "Error: All AI services (primary, fallback, and Google Gemini) are unavailable.";
