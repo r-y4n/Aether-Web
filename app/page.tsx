@@ -1,7 +1,7 @@
 "use client"
 
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, ResponsiveContainer } from "recharts"
 import { Analytics } from "@vercel/analytics/react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AetherInfoSection } from "@/components/info-section"
@@ -44,12 +44,10 @@ import {
 
 export default function Index() {
   const chartData = [
-    { month: "January", desktop: 186 },
-    { month: "February", desktop: 305 },
-    { month: "March", desktop: 237 },
-    { month: "April", desktop: 73 },
-    { month: "May", desktop: 209 },
-    { month: "June", desktop: 214 },
+    { month: "January", desktop: 1163 },
+    { month: "February", desktop: 476 },
+    { month: "March", desktop: 524 },
+    { month: "April", desktop: 1169 }
   ]
   const chartConfig = {
     desktop: {
@@ -77,6 +75,7 @@ export default function Index() {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
+        <div className="m-6">
         <GlowingInput />
         <br></br>
         <section>
@@ -108,6 +107,57 @@ Our Chrome Extension helps find answers to selected questions online
           </CardContent>
         </Card>
         </div>
+        <ResponsiveContainer width="80%" height={500} className="m-10">
+        <Card className="m-3">
+      <CardHeader>
+        <CardTitle>Area Chart</CardTitle>
+        <CardDescription>
+          Showing the total amount of AI requests in 2025
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig}>
+          <AreaChart
+            accessibilityLayer
+            data={chartData}
+            margin={{
+              left: 12,
+              right: 12,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="line" />}
+            />
+            <Area
+              dataKey="desktop"
+              type="natural"
+              fill="var(--color-desktop)"
+              fillOpacity={0.4}
+              stroke="var(--color-desktop)"
+            />
+          </AreaChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter>
+        <div className="flex w-full items-start gap-2 text-sm">
+          <div className="grid gap-2">
+            <div className="flex items-center gap-2 leading-none text-muted-foreground">
+              January - April 2025
+            </div>
+          </div>
+        </div>
+      </CardFooter>
+    </Card>
+    </ResponsiveContainer>
         </section>
         <br />
         <Separator />
@@ -116,6 +166,7 @@ Our Chrome Extension helps find answers to selected questions online
         <Card>
         <AetherInfoSection />
         </Card>
+        </div>
       </SidebarInset>
       <Card className="hidden md:block">
         <CardHeader>
