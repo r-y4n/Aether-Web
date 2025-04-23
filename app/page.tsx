@@ -1,6 +1,7 @@
 "use client"
 
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { Analytics } from "@vercel/analytics/react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AetherInfoSection } from "@/components/info-section"
@@ -30,12 +31,33 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 
 export default function Index() {
+  const chartData = [
+    { month: "January", desktop: 186 },
+    { month: "February", desktop: 305 },
+    { month: "March", desktop: 237 },
+    { month: "April", desktop: 73 },
+    { month: "May", desktop: 209 },
+    { month: "June", desktop: 214 },
+  ]
+  const chartConfig = {
+    desktop: {
+      label: "Desktop",
+      color: "hsl(var(--chart-1))",
+    },
+  } satisfies ChartConfig
+  
   return (
  <SidebarProvider>
       <SpeedInsights />
