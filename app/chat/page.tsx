@@ -3,6 +3,7 @@
 import { ThemeProvider } from "next-themes";
 import { Providers } from "@/components/providers";
 import { useState, useRef, useEffect, Suspense } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, push } from "firebase/database";
 import { Send, User, Bot } from "lucide-react";
@@ -244,42 +245,67 @@ function ChatContent() {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-
         <div className="flex-1 flex flex-col h-full p-4 transition-all duration-300 ease-in-out">
-          <Card className="flex flex-col flex-1 h-full w-full max-w-5xl mx-auto transition-all duration-300">
-            <CardContent className="flex-1 min-h-0 overflow-y-auto p-4 scrollbar-hide">
-              <div className="flex flex-col justify-end h-full space-y-2">
-                {messages.length === 0 ? (
-                  <div className="flex items-center justify-center h-full text-muted-foreground">
-                    <p>Start a conversation with the AI assistant</p>
-                  </div>
-                ) : (
-                  messages.map((message) => (
-                    <div key={message.id} className={`flex w-full ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-                      <div className={`chat-bubble ${message.role === "user" ? "user-message" : "ai-message"}`}>
-                        <Avatar className={message.role === "user" ? "bg-primary" : "bg-muted"}>
-                          <AvatarFallback>{message.role === "user" ? <User size={18} color="lightblue" /> : <Bot size={18} />}</AvatarFallback>
-                        </Avatar>
-                        <div className="message-content">{message.content}</div>
-                      </div>
-                    </div>
-                  ))
-                )}
-                {isLoading && <div className="loading-indicator">Typing...</div>}
-                <div ref={messagesEndRef} />
+        <Card className="h-full flex flex-col">
+  <ScrollArea className="flex-1 h-full w-full max-w-5xl mx-auto transition-all duration-300 flex flex-col">
+    <CardContent className="flex-1 min-h-0 overflow-y-auto p-4">
+      <div className="flex flex-col justify-end h-full space-y-2">
+        {messages.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-muted-foreground">
+            <p>Start a conversation with the AI assistant</p>
+          </div>
+        ) : (
+          messages.map((message) => (
+            <div
+              key={message.id}
+              className={`flex w-full ${
+                message.role === "user" ? "justify-end" : "justify-start"
+              }`}
+            >
+              <div
+                className={`chat-bubble ${
+                  message.role === "user" ? "user-message" : "ai-message"
+                }`}
+              >
+                <Avatar
+                  className={
+                    message.role === "user" ? "bg-primary" : "bg-muted"
+                  }
+                >
+                  <AvatarFallback>
+                    {message.role === "user" ? (
+                      <User size={18} />
+                    ) : (
+                      <Bot size={18} />
+                    )}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="message-content">{message.content}</div>
               </div>
-            </CardContent>
-            <CardFooter className="border-t p-4">
-              <form onSubmit={handleSubmit} className="flex w-full gap-2">
-                <Input value={input} onChange={handleInputChange} placeholder="Type your message..." disabled={isLoading} />
-                <Button type="submit" disabled={isLoading || !input.trim()}>
-                  <Send className="h-4 w-4" />
-                </Button>
-              </form>
-            </CardFooter>
-          </Card>
-        </div>
+            </div>
+          ))
+        )}
+        {isLoading && <div className="loading-indicator">Typing...</div>}
+        <div ref={messagesEndRef} />
       </div>
+    </CardContent>
+    <CardFooter className="border-t p-4 mt-auto">
+      <form onSubmit={handleSubmit} className="flex w-full gap-2">
+        <Input
+          value={input}
+          onChange={handleInputChange}
+          placeholder="Type your message..."
+          disabled={isLoading}
+        />
+        <Button type="submit" disabled={isLoading || !input.trim()}>
+          <Send className="h-4 w-4" />
+        </Button>
+      </form>
+    </CardFooter>
+  </ScrollArea>
+</Card>
+</div> </div>
+
     </SidebarInset>
   );
 }

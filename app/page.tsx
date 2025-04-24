@@ -79,7 +79,7 @@ export default function Index() {
         <GlowingInput />
         <br></br>
         <section>
-        <div className="flex w-max container gap-4">
+        <div className="flex flex-col md:flex-row justify-center gap-4">
         <Card className="flex-none p-2 m-2 shadow-lg sm-container">
           <CardHeader className="p-4">
             <CardTitle>Aether Assistant</CardTitle>
@@ -107,8 +107,8 @@ Our Chrome Extension helps find answers to selected questions online
           </CardContent>
         </Card>
         </div>
-        <ResponsiveContainer width="80%" height={500} className="m-10">
-        <Card className="m-3">
+        <ResponsiveContainer width="80%" height={500} className="m-8">
+        <Card className="m-3 shadow-lg">
       <CardHeader>
         <CardTitle>Usage Chart</CardTitle>
         <CardDescription>
@@ -158,6 +158,11 @@ Our Chrome Extension helps find answers to selected questions online
       </CardFooter>
     </Card>
     </ResponsiveContainer>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
         </section>
         <br />
         <Separator />
