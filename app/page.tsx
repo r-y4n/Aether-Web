@@ -47,7 +47,7 @@ export default function Index() {
     { month: "January", requests: 1163 },
     { month: "February", requests: 476 },
     { month: "March", requests: 524 },
-    { month: "April", requests: 1169 }
+    { month: "April", requests: 1255 }
   ]
   const chartConfig = {
     requests: {
@@ -107,62 +107,79 @@ Our Chrome Extension helps find answers to selected questions online
           </CardContent>
         </Card>
         </div>
-        <ResponsiveContainer width="80%" height={500} className="m-8">
-        <Card className="m-3 shadow-lg">
-      <CardHeader>
-        <CardTitle>Usage Chart</CardTitle>
-        <CardDescription>
-          Showing the total amount of AI requests in 2025
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <Area
-              dataKey="requests"
-              type="natural"
-              fill="var(--primary)"
-              fillOpacity={0.85}
-              stroke="var(--primary)"
-            />
-          </AreaChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - April 2025
-            </div>
+        <ResponsiveContainer
+  width="100%" // Use full width for responsiveness
+  height={400} // Adjust height for better appearance on smaller screens
+  className="sm:mb-6 mx-auto mt-6 px-4 md:px-0"
+>
+  <Card className="m-3 shadow-lg">
+    <CardHeader>
+      <CardTitle>Usage Chart</CardTitle>
+      <CardDescription>
+        Showing the total amount of AI requests in 2025
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
+      <ChartContainer config={chartConfig}>
+        <AreaChart
+          accessibilityLayer
+          data={chartData}
+          margin={{
+            top: 10,
+            left: 12,
+            right: 12,
+            bottom: 10,
+          }}
+        >
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="month"
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
+            tickFormatter={(value) => value.slice(0, 3)}
+          />
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent indicator="line" />}
+          />
+          <Area
+            dataKey="requests"
+            type="natural"
+            fill="var(--primary)"
+            fillOpacity={0.85}
+            stroke="var(--primary)"
+          />
+        </AreaChart>
+      </ChartContainer>
+    </CardContent>
+    <CardFooter>
+      <div className="flex w-full items-start gap-2 text-sm">
+        <div className="grid gap-2">
+          <div className="flex items-center gap-2 leading-none text-muted-foreground">
+            January - April 2025
           </div>
         </div>
-      </CardFooter>
-    </Card>
-    </ResponsiveContainer>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
+      </div>
+    </CardFooter>
+  </Card>
+  </ResponsiveContainer>
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
+<br className="hidden lg:block" />
         </section>
         <br />
         <Separator />

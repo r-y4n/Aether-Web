@@ -289,6 +289,7 @@ function ChatContent() {
         <div ref={messagesEndRef} />
       </div>
     </CardContent>
+    </ScrollArea>
     <CardFooter className="border-t p-4 mt-auto">
       <form onSubmit={handleSubmit} className="flex w-full gap-2">
         <Input
@@ -302,7 +303,6 @@ function ChatContent() {
         </Button>
       </form>
     </CardFooter>
-  </ScrollArea>
 </Card>
 </div> </div>
 
