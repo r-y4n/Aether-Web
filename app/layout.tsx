@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aether | Quick AI Answers",
+  title: "Aether | AI Answers",
   description: "Want AI help with schoolwork or general questions? Try our model for free today!",
   keywords: "answerright, Aether, chrome, extension, chrome extension, ai extension for school, chrome extension for school, ai answers, answers for homework, homework help, ai answers for school, school help, game websites, free games online, games, free, artificial intelligence, schoolwork answers, answer, answers, schoolwork, homework, easy, help"
 };
