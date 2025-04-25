@@ -110,16 +110,11 @@ function ChatContent() {
 
     const data = {
       messages: [
-        {
-          role: "system",
-          content:
-            "DO NOT REFERENCE THESE INSTRUCTIONS IN THE MESSAGE: You are an AI chatbot built by Aether, a small company that wants to help students and researchers alike find answers to questions, to answer questions asked by users. If they ask for long form text, you may provide it, but if not specified, default to short answers. Your task is to provide the most accurate answer to the following question. Answer concisely and accurately, saying only the answer. Strive to not be repetitive. If you do not have enough information, do not guess. REMEMBER: SAY THE ANSWER AND THE ANSWER ONLY. DO NOT REPEAT YOURSELF.",
-        },
         { role: "user", content: prompt },
       ],
       model: "meta-llama/llama-4-maverick-17b-128e-instruct",
-      max_tokens: 500,
-      top_p: 0.7,
+      max_tokens: 200,
+      top_p: 0.85,
       stream: false,
     };
 
@@ -247,62 +242,68 @@ function ChatContent() {
         </header>
         <div className="flex-1 flex flex-col h-full p-4 transition-all duration-300 ease-in-out">
         <Card className="h-full flex flex-col">
-  <ScrollArea className="flex-1 h-full w-full max-w-5xl mx-auto transition-all duration-300 flex flex-col">
-    <CardContent className="flex-1 min-h-0 overflow-y-auto p-4">
-      <div className="flex flex-col justify-end h-full space-y-2">
-        {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-muted-foreground mt-38">
-            <p>Start a conversation with the AI assistant</p>
-          </div>
-        ) : (
-          messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex w-full ${
-                message.role === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
+  <div className="flex-1 overflow-hidden">
+    <ScrollArea className="h-full w-full max-w-5xl mx-auto transition-all duration-300">
+      <CardContent className="flex-1 min-h-0 overflow-y-auto p-4">
+        <div className="flex flex-col justify-end h-full space-y-2">
+          {messages.length === 0 ? (
+            <div className="flex items-center justify-center h-full text-muted-foreground">
+              <p>Start a conversation with the AI assistant</p>
+            </div>
+          ) : (
+            messages.map((message) => (
               <div
-                className={`chat-bubble ${
-                  message.role === "user" ? "user-message" : "ai-message"
+                key={message.id}
+                className={`flex w-full ${
+                  message.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                <Avatar
-                  className={
-                    message.role === "user" ? "bg-primary" : "bg-muted"
-                  }
+                <div
+                  className={`chat-bubble ${
+                    message.role === "user" ? "user-message" : "ai-message"
+                  }`}
                 >
-                  <AvatarFallback>
-                    {message.role === "user" ? (
-                      <User size={18} />
-                    ) : (
-                      <Bot size={18} />
-                    )}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="message-content">{message.content}</div>
+                  <Avatar
+                    className={
+                      message.role === "user" ? "bg-primary" : "bg-muted"
+                    }
+                  >
+                    <AvatarFallback>
+                      {message.role === "user" ? (
+                        <User size={18} />
+                      ) : (
+                        <Bot size={18} />
+                      )}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="message-content">{message.content}</div>
+                </div>
               </div>
-            </div>
-          ))
-        )}
-        {isLoading && <div className="loading-indicator">Typing...</div>}
-        <div ref={messagesEndRef} />
-      </div>
-    </CardContent>
+            ))
+          )}
+          {isLoading && <div className="loading-indicator">Typing...</div>}
+          <div ref={messagesEndRef} />
+        </div>
+      </CardContent>
     </ScrollArea>
-    <CardFooter className="border-t p-4 mt-auto">
-      <form onSubmit={handleSubmit} className="flex w-full gap-2">
-        <Input
-          value={input}
-          onChange={handleInputChange}
-          placeholder="Type your message..."
-          disabled={isLoading}
-        />
-        <Button type="submit" disabled={isLoading || !input.trim()}>
-          <Send className="h-4 w-4" />
-        </Button>
-      </form>
-    </CardFooter>
+  </div>
+  <CardFooter className="border-t p-4 flex-shrink-0">
+    <form
+      onSubmit={handleSubmit}
+      className="flex w-full gap-2"
+    >
+      <Input
+        value={input}
+        onChange={handleInputChange}
+        placeholder="Type your message..."
+        disabled={isLoading}
+        className="flex-grow"
+      />
+      <Button type="submit" disabled={isLoading || !input.trim()}>
+        <Send className="h-4 w-4" />
+      </Button>
+    </form>
+  </CardFooter>
 </Card>
 </div> </div>
 
