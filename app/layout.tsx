@@ -30,6 +30,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
 <link href="https://fonts.googleapis.com/css2?family=Playwrite+DE+LA&display=swap" rel="stylesheet" />
+<link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="apple-touch-icon" href="/aether192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="apple-mobile-web-app-title" content="Aether" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
