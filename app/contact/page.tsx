@@ -30,7 +30,16 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const database = getDatabase(firebaseApp);
 
-const saveFeedbackToFirebase = (data: any) => {
+const formSchema = z.object({
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  email: z.string().email({ message: "Invalid email address." }),
+  feedback: z.string().min(1, { message: "Feedback is required." }),
+});
+
+type FeedbackFormData = z.infer<typeof formSchema>;
+
+const saveFeedbackToFirebase = (data: FeedbackFormData) => {
   if (!data || Object.keys(data).length === 0) {
     console.error("Invalid form data. Toast will not be shown.");
     return;
@@ -74,20 +83,12 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-const formSchema = z.object({
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  email: z.string().email({ message: "Invalid email address." }),
-  feedback: z.string().min(1, { message: "Feedback is required." }),
-});
 
 export function ContactForm() {
   const [formResult, setFormResult] = useState<string | null>(null);
@@ -102,7 +103,7 @@ export function ContactForm() {
     },
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: FeedbackFormData) => {
     console.log(data);
     setFormResult(JSON.stringify(data, null, 2));
     saveFeedbackToFirebase(data);

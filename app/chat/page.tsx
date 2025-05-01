@@ -170,7 +170,7 @@ function ChatContent() {
           return geminiResponse.text.trim();
         } catch (geminiError) {
           console.error("Google Gemini API Error:", geminiError);
-          return "Error: Calls Failed, Disable any content blockers and try again.";
+          return "Error: Calls Failed, Disable any content blockers and try again. Error code: GEMEXIT";
         }
       }
     }
