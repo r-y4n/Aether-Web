@@ -90,7 +90,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-export function ContactForm() {
+function ContactForm() {
   const [formResult, setFormResult] = useState<string | null>(null);
 
   const form = useForm({
@@ -225,3 +225,4 @@ export default function ContactPage() {
     </SidebarProvider>
   );
 }
+// hi
