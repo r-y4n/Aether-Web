@@ -34,6 +34,10 @@ const data = {
           title: "About Us",
           url: "/about",
         },
+        {
+          title: "Bug Reports/Feedback",
+          url: "/contact",
+        },
       ],
     },
     {

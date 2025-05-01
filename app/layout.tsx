@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description: "Want AI help with schoolwork or general questions? Try our model for free today!",
   keywords: "answerright, Aether, chrome, extension, chrome extension, ai extension for school, chrome extension for school, ai answers, answers for homework, homework help, ai answers for school, school help, game websites, free games online, games, free, artificial intelligence, schoolwork answers, answer, answers, schoolwork, homework, easy, help"
 };
-
+import { Toaster } from "@/components/ui/sonner"
 export default function RootLayout({  
   children,
 }: Readonly<{
@@ -47,6 +47,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Providers>{children}</Providers>
+          <Toaster className="p-7 m-10"/>
         </ThemeProvider>
       </body>
     </html>

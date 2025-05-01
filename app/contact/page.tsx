@@ -1,17 +1,201 @@
-import { AppSidebar } from "@/components/app-sidebar"
+"use client";
+
+import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useState } from "react";
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, push, remove } from "firebase/database";
+
+const firebaseConfig = {
+  databaseURL: "https://answerright-8bff7-default-rtdb.firebaseio.com/",
+  projectId: "answerright-8bff7",
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const database = getDatabase(firebaseApp);
+
+const saveFeedbackToFirebase = (data: any) => {
+  if (!data || Object.keys(data).length === 0) {
+    console.error("Invalid form data. Toast will not be shown.");
+    return;
+  }
+
+  const timestamp = new Date().toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
+  });
+  const reference = ref(database, "feedback");
+  const newFeedbackRef = push(reference, { ...data, timestamp });
+
+  newFeedbackRef
+    .then((snapshot) => {
+      const feedbackKey = snapshot.key;
+      if (feedbackKey) {
+        toast.success("Feedback saved!", {
+          action: {
+            label: "Undo",
+            onClick: () => {
+              const feedbackRef = ref(database, `feedback/${feedbackKey}`);
+              remove(feedbackRef).catch((error) =>
+                console.error("Error removing feedback from Firebase:", error)
+              );
+            },
+          },
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Error saving feedback to Firebase:", error);
+    });
+};
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+const formSchema = z.object({
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  email: z.string().email({ message: "Invalid email address." }),
+  feedback: z.string().min(1, { message: "Feedback is required." }),
+});
+
+export function ContactForm() {
+  const [formResult, setFormResult] = useState<string | null>(null);
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      feedback: "",
+    },
+  });
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+    setFormResult(JSON.stringify(data, null, 2));
+    saveFeedbackToFirebase(data);
+  };
+
+  return (
+    <Form {...form}>
+      <div className="p-7">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-10 grid-rows-6 gap-6"
+        >
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem className="col-span-5">
+                <FormLabel>First Name (optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="First"
+                    {...field}
+                    className="border-[--foreground] focus:border-[--primary]"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem className="col-span-5">
+                <FormLabel>Last Name (optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Last"
+                    {...field}
+                    className="border-[--foreground] focus:border-[--primary]"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="col-span-10">
+                <FormLabel>Email*</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="example@example.com"
+                    {...field}
+                    className="border-[--foreground] focus:border-[--primary]"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="feedback"
+            render={({ field }) => (
+              <FormItem className="col-span-10 row-span-1 max-w-full max-h-[300px]">
+                <FormLabel>Bug Reports and Feedback*</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Your feedback here..."
+                    {...field}
+                    className="border-[--foreground] focus:border-[--primary]"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            className="row-span-3 col-span-3"
+            onClick={() => toast("Feedback has been submitted!")}
+          >
+            Submit
+          </Button>
+        </form>
+        <p>{formResult}</p>
+      </div>
+    </Form>
+  );
+}
 
 export default function Contact() {
   return (
@@ -24,27 +208,19 @@ export default function Contact() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="/">
-                  Home
-                </BreadcrumbLink>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbLink href="/contact">Contact
-                </BreadcrumbLink>
+                <BreadcrumbLink href="/contact">Contact</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-          </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+        <div className="p-4 m-6 h-full bg-[--card]">
+          <ContactForm />
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }
