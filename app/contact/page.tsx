@@ -198,7 +198,7 @@ export function ContactForm() {
   );
 }
 
-export default function Contact() {
+export default function ContactPage() {
   return (
     <SidebarProvider>
       <AppSidebar />
