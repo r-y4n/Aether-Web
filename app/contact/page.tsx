@@ -107,6 +107,7 @@ function ContactForm() {
 
   const onSubmit = (data: FeedbackFormData) => {
     saveFeedbackToFirebase(data);
+    form.reset();
   };
 
   return (
