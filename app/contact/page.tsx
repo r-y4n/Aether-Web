@@ -18,9 +18,9 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, push, remove } from "firebase/database";
+import { CheckCircle } from "lucide-react";
 
 const firebaseConfig = {
   databaseURL: "https://answerright-8bff7-default-rtdb.firebaseio.com/",
@@ -40,11 +40,6 @@ const formSchema = z.object({
 type FeedbackFormData = z.infer<typeof formSchema>;
 
 const saveFeedbackToFirebase = (data: FeedbackFormData) => {
-  if (!data || Object.keys(data).length === 0) {
-    console.error("Invalid form data. Toast will not be shown.");
-    return;
-  }
-
   const timestamp = new Date().toLocaleString("en-US", {
     year: "numeric",
     month: "long",
@@ -66,9 +61,18 @@ const saveFeedbackToFirebase = (data: FeedbackFormData) => {
             label: "Undo",
             onClick: () => {
               const feedbackRef = ref(database, `feedback/${feedbackKey}`);
-              remove(feedbackRef).catch((error) =>
-                console.error("Error removing feedback from Firebase:", error)
-              );
+              remove(feedbackRef)
+                .then(() => {
+                  toast(
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="animate-checkmark" />
+                      <span>Feedback removed!</span>
+                    </div>
+                  );
+                })
+                .catch((error) =>
+                  console.error("Error removing feedback from Firebase:", error)
+                );
             },
           },
         });
@@ -91,8 +95,6 @@ import {
 import { Input } from "@/components/ui/input";
 
 function ContactForm() {
-  const [formResult, setFormResult] = useState<string | null>(null);
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -104,8 +106,6 @@ function ContactForm() {
   });
 
   const onSubmit = (data: FeedbackFormData) => {
-    console.log(data);
-    setFormResult(JSON.stringify(data, null, 2));
     saveFeedbackToFirebase(data);
   };
 
@@ -186,13 +186,10 @@ function ContactForm() {
           />
           <Button
             type="submit"
-            className="row-span-3 col-span-3"
-            onClick={() => toast("Feedback has been submitted!")}
-          >
+            className="row-span-3 col-span-3">
             Submit
           </Button>
         </form>
-        <p>{formResult}</p>
       </div>
     </Form>
   );
