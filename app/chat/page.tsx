@@ -38,6 +38,22 @@ type Message = {
   content: string;
 };
 
+const highlightItalicText = (content: string) => {
+  const regex = /\*{1,3}(.*?)\*{1,3}/g;
+  return content.replace(regex, (match, p1) => `<em>${p1}</em>`);
+};
+
+const highlightBoxedAnswer = (content: string) => {
+  const regex = /\$\\boxed\{(.*?)\}\$/g;
+  return content.replace(regex, (match, p1) => `<span class='highlight'>${p1}</span>`);
+};
+
+const processMessageContent = (content: string) => {
+  let processedContent = highlightBoxedAnswer(content);
+  processedContent = highlightItalicText(processedContent);
+  return processedContent;
+};
+
 function ChatContent() {
   const [uuid, setUuid] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -110,7 +126,7 @@ function ChatContent() {
 
     const data = {
       messages: [
-        { role: "user", content: prompt },
+        { role: "user", content: `Keep the answer short while maintaining the effectiveness and human readability of the answer.${prompt}` },
       ],
       model: "meta-llama/llama-4-maverick-17b-128e-instruct",
       max_tokens: 200,
@@ -276,7 +292,10 @@ function ChatContent() {
                       )}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="message-content">{message.content}</div>
+                  <div
+                    className="message-content"
+                    dangerouslySetInnerHTML={{ __html: processMessageContent(message.content) }}
+                  />
                 </div>
               </div>
             ))
