@@ -47,7 +47,8 @@ export default function Index() {
     { month: "January", requests: 1163 },
     { month: "February", requests: 476 },
     { month: "March", requests: 524 },
-    { month: "April", requests: 1549 }
+    { month: "April", requests: 1549 },
+    { month: "May", requests: 192 },
   ]
   const chartConfig = {
     requests: {
@@ -157,7 +158,7 @@ Our Chrome Extension helps find answers to selected questions online
       <div className="flex w-full items-start gap-2 text-sm">
         <div className="grid gap-2">
           <div className="flex items-center gap-2 leading-none text-muted-foreground">
-            January - April 2025
+            January 1 - May 4 2025
           </div>
         </div>
       </div>
