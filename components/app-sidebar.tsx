@@ -41,7 +41,7 @@ const data = {
       ],
     },
     {
-      title: "Socials",
+      title: "Socials (Coming Soon)",
       url: "#",
       icon: Bot,
       items: [
