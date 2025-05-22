@@ -61,6 +61,7 @@ function ChatContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [autoSubmitted, setAutoSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pastAnswers, setPastAnswers] = useState<{ question: string; answer: string }[]>([]); // Memory of past Q&A
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const submissionLock = useRef(false);
 
@@ -117,75 +118,89 @@ function ChatContent() {
     return await callAI(prompt);
   };
 
+  // Groq is now the primary model, Gemini is fallback, OpenRouter is tertiary
   const callAI = async (prompt: string): Promise<string> => {
-    const primaryApiKey = "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"; // Primary API Key
-    const fallbackApiKey = "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"; // Fallback API Key
+    const geminiApiKey = "AIzaSyC6q7LQ_MDaD-GbfNS1MnCqdHKq8NXKCkU";
+    const groqApiKey = "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";
+    const openRouterApiKey = "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";
 
-    const primaryUrl = "https://api.groq.com/openai/v1/chat/completions";
-    const fallbackUrl = "https://openrouter.ai/api/v1/chat/completions";
+    const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
+    const openRouterUrl = "https://openrouter.ai/api/v1/chat/completions";
 
-    const data = {
-      messages: [
-        { role: "user", content: `Keep the answer short while maintaining the effectiveness and human readability of the answer.${prompt}` },
-      ],
-      model: "meta-llama/llama-4-maverick-17b-128e-instruct",
-      max_tokens: 200,
-      top_p: 0.85,
-      stream: false,
-    };
+    // Simple memory: just append past Q&A as a chat history
+    const chatHistory = pastAnswers.flatMap((item) => [
+      { role: "user", content: item.question },
+      { role: "assistant", content: item.answer },
+    ]);
+    const messages = [
+      ...chatHistory,
+      { role: "user", content: prompt },
+    ];
 
     try {
-      // Primary API call
-      const response = await fetch(primaryUrl, {
+      // Primary: Groq
+      const data = {
+        messages,
+        model: "compound-beta",
+        max_tokens: 400,
+        top_p: 0.85,
+        stream: false,
+      };
+      const response = await fetch(groqUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${primaryApiKey}`,
+          Authorization: `Bearer ${groqApiKey}`,
         },
         body: JSON.stringify(data),
       });
-
       if (!response.ok) {
-        throw new Error("Primary API call failed");
+        throw new Error("Groq API call failed");
       }
-
       const jsonResponse = await response.json();
       return jsonResponse.choices[0].message.content.trim();
-    } catch (primaryError) {
-      console.error("Primary API Error, Switching to fallback:", primaryError);
-
+    } catch (groqError) {
+      console.error("Groq API Error, switching to Gemini:", groqError);
       try {
-        // Fallback API call
-        const fallbackResponse = await fetch(fallbackUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${fallbackApiKey}`,
-          },
-          body: JSON.stringify(data),
+        // Fallback: Gemini
+        const geminiAI = new GoogleGenAI({ apiKey: geminiApiKey });
+        // For Gemini, concatenate as a simple text history WITHOUT Q:/A: prefixes
+        const memoryText = pastAnswers.map((item) => `${item.question}\n${item.answer}`).join("\n");
+        const fullPrompt = memoryText ? `${memoryText}\n${prompt}` : prompt;
+        const geminiResponse = await geminiAI.models.generateContent({
+          model: "gemini-2.0-flash",
+          contents: fullPrompt,
         });
-
-        if (!fallbackResponse.ok) {
-          throw new Error("Fallback API call failed");
+        if (!geminiResponse || !geminiResponse.text) {
+          throw new Error("Gemini Call Returned Undefined");
         }
-
-        const fallbackJsonResponse = await fallbackResponse.json();
-        return fallbackJsonResponse.choices[0].message.content.trim();
-      } catch (fallbackError) {
-        console.error("Fallback API Error, Switching to Google Gemini:", fallbackError);
-
+        return geminiResponse.text.trim();
+      } catch (geminiError) {
+        console.error("Gemini API Error, switching to OpenRouter:", geminiError);
         try {
-          // Google Gemini API call using @google/genai
-          const geminiResponse = await geminiAI.models.generateContent({
-            model: "gemini-2.0-flash",
-            contents: prompt,
+          // Tertiary: OpenRouter
+          const data = {
+            messages,
+            model: "meta-llama/llama-4-maverick-17b-128e-instruct",
+            max_tokens: 200,
+            top_p: 0.85,
+            stream: false,
+          };
+          const fallbackResponse = await fetch(openRouterUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${openRouterApiKey}`,
+            },
+            body: JSON.stringify(data),
           });
-          if (!geminiResponse || !geminiResponse.text) {
-            throw new Error("Tertiary Call Returned Undefined");
+          if (!fallbackResponse.ok) {
+            throw new Error("OpenRouter API call failed");
           }
-          return geminiResponse.text.trim();
-        } catch (geminiError) {
-          console.error("Google Gemini API Error:", geminiError);
+          const fallbackJsonResponse = await fallbackResponse.json();
+          return fallbackJsonResponse.choices[0].message.content.trim();
+        } catch (openRouterError) {
+          console.error("OpenRouter API Error:", openRouterError);
           return "Error: Calls Failed, Disable any content blockers and try again. Error code: GEMEXIT";
         }
       }
@@ -205,6 +220,10 @@ function ChatContent() {
     try {
       const aiAnswer = await fetchGroqAnswer(question.trim());
       saveToFirebase(question.trim(), aiAnswer);
+      // Only add to memory if not an error message
+      if (!aiAnswer.startsWith("Error:")) {
+        setPastAnswers((prev) => [...prev, { question: question.trim(), answer: aiAnswer }]);
+      }
       const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: "assistant", content: aiAnswer };
       setMessages((prev) => [...prev, assistantMessage]);
       setAutoSubmitted(true);
@@ -229,6 +248,10 @@ function ChatContent() {
     try {
       const aiAnswer = await fetchGroqAnswer(input.trim());
       saveToFirebase(input.trim(), aiAnswer);
+      // Only add to memory if not an error message
+      if (!aiAnswer.startsWith("Error:")) {
+        setPastAnswers((prev) => [...prev, { question: input.trim(), answer: aiAnswer }]);
+      }
       const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: "assistant", content: aiAnswer };
       setMessages((prev) => [...prev, assistantMessage]);
     } finally {
