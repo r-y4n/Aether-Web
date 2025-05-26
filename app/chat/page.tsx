@@ -39,11 +39,6 @@ type Message = {
   content: string;
 };
 
-const highlightItalicText = (content: string) => {
-  const regex = /\*{1,3}(.*?)\*{1,3}/g;
-  return content.replace(regex, (match, p1) => `<em>${p1}</em>`);
-};
-
 const highlightBoxedAnswer = (content: string) => {
   const regex = /\$\\boxed\{(.*?)\}\$/g;
   return content.replace(regex, (match, p1) => `<span class='highlight'>${p1}</span>`);
