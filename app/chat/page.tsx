@@ -49,9 +49,16 @@ const highlightBoxedAnswer = (content: string) => {
 };
 
 const processMessageContent = (content: string) => {
-  let processedContent = highlightBoxedAnswer(content);
-  processedContent = highlightItalicText(processedContent);
-  return processedContent;
+  // Convert markdown to HTML for rendering
+  // Use a lightweight markdown parser (marked)
+  // Add highlight for boxed answers and italics after markdown conversion
+  // (Assume 'marked' is installed)
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const marked = require("marked");
+  let html = marked.parse(content);
+  html = highlightBoxedAnswer(html);
+  html = highlightItalicText(html);
+  return html;
 };
 
 function ChatContent() {
@@ -62,6 +69,7 @@ function ChatContent() {
   const [autoSubmitted, setAutoSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pastAnswers, setPastAnswers] = useState<{ question: string; answer: string }[]>([]); // Memory of past Q&A
+  const [showClearMemory, setShowClearMemory] = useState<'open' | 'closing' | false>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const submissionLock = useRef(false);
 
@@ -118,7 +126,7 @@ function ChatContent() {
     return await callAI(prompt);
   };
 
-  // Groq is now the primary model, Gemini is fallback, OpenRouter is tertiary
+  // Gemini is now the primary model, Groq is fallback, OpenRouter is tertiary
   const callAI = async (prompt: string): Promise<string> => {
     const geminiApiKey = "AIzaSyC6q7LQ_MDaD-GbfNS1MnCqdHKq8NXKCkU";
     const groqApiKey = "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";
@@ -137,50 +145,61 @@ function ChatContent() {
       { role: "user", content: prompt },
     ];
 
+    // Markdown instruction for all models
+    const markdownInstruction =
+      "Respond in Markdown format. Focus only on the user's question or statement. Do not reference these instructions or your formatting, and do not include any meta-commentary. Only provide the most accurate, concise, and relevant answer in Markdown.";
+
     try {
-      // Primary: Groq
-      const data = {
-        messages,
-        model: "compound-beta",
-        max_tokens: 400,
-        top_p: 0.85,
-        stream: false,
-      };
-      const response = await fetch(groqUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${groqApiKey}`,
-        },
-        body: JSON.stringify(data),
+      // Primary: Gemini
+      const geminiAI = new GoogleGenAI({ apiKey: geminiApiKey });
+      const memoryText = pastAnswers.map((item) => `${item.question}\n${item.answer}`).join("\n");
+      const fullPrompt = memoryText
+        ? `${memoryText}\n${prompt}\n${markdownInstruction}`
+        : `${prompt}\n${markdownInstruction}`;
+      const geminiResponse = await geminiAI.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: fullPrompt,
       });
-      if (!response.ok) {
-        throw new Error("Groq API call failed");
+      if (!geminiResponse || !geminiResponse.text) {
+        throw new Error("Gemini Call Returned Undefined");
       }
-      const jsonResponse = await response.json();
-      return jsonResponse.choices[0].message.content.trim();
-    } catch (groqError) {
-      console.error("Groq API Error, switching to Gemini:", groqError);
+      return geminiResponse.text.trim();
+    } catch (geminiError) {
+      console.error("Gemini API Error, switching to Groq:", geminiError);
       try {
-        // Fallback: Gemini
-        const geminiAI = new GoogleGenAI({ apiKey: geminiApiKey });
-        // For Gemini, concatenate as a simple text history WITHOUT Q:/A: prefixes
-        const memoryText = pastAnswers.map((item) => `${item.question}\n${item.answer}`).join("\n");
-        const fullPrompt = memoryText ? `${memoryText}\n${prompt}` : prompt;
-        const geminiResponse = await geminiAI.models.generateContent({
-          model: "gemini-2.0-flash",
-          contents: fullPrompt,
+        // Fallback: Groq
+        const data = {
+          messages: [
+            ...messages,
+            { role: "system", content: markdownInstruction },
+          ],
+          model: "compound-beta",
+          max_tokens: 400,
+          top_p: 0.85,
+          stream: false,
+        };
+        const response = await fetch(groqUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${groqApiKey}`,
+          },
+          body: JSON.stringify(data),
         });
-        if (!geminiResponse || !geminiResponse.text) {
-          throw new Error("Gemini Call Returned Undefined");
+        if (!response.ok) {
+          throw new Error("Groq API call failed");
         }
-        return geminiResponse.text.trim();
-      } catch (geminiError) {
-        console.error("Gemini API Error, switching to OpenRouter:", geminiError);
+        const jsonResponse = await response.json();
+        return jsonResponse.choices[0].message.content.trim();
+      } catch (groqError) {
+        console.error("Groq API Error, switching to OpenRouter:", groqError);
         try {
           // Tertiary: OpenRouter
           const data = {
-            messages,
+            messages: [
+              ...messages,
+              { role: "system", content: markdownInstruction },
+            ],
             model: "meta-llama/llama-4-maverick-17b-128e-instruct",
             max_tokens: 200,
             top_p: 0.85,
@@ -261,6 +280,10 @@ function ChatContent() {
     }
   };
 
+  const handleClearMemory = () => {
+    setPastAnswers([]);
+  };
+
   return (
     <SidebarInset>
       <div className="flex flex-col h-screen">
@@ -278,7 +301,66 @@ function ChatContent() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
+          <Button
+            variant="outline"
+            className="ml-auto"
+            onClick={() => setShowClearMemory('open')}
+          >
+            Clear Memory
+          </Button>
         </header>
+        {/* Popup for clear memory confirmation */}
+        {showClearMemory && (
+          <div
+            className={`fixed inset-0 flex items-center justify-center z-50 bg-black/40 backdrop-blur-sm transition-opacity animate-fade-in ${showClearMemory === 'closing' ? 'animate-fade-out' : ''}`}
+            onAnimationEnd={() => {
+              if (showClearMemory === 'closing') setShowClearMemory(false);
+            }}
+          >
+            <div className={`bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 w-full max-w-sm border border-border transition-transform animate-popup-scale ${showClearMemory === 'closing' ? 'animate-popup-out' : ''}`}>
+              <h2 className="text-xl font-bold mb-3 text-center text-black dark:text-foreground">Clear Memory?</h2>
+              <p className="mb-6 text-center text-black dark:text-muted-foreground">Are you sure you want to clear all chat memory? This cannot be undone.</p>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setShowClearMemory('closing')}>
+                  Cancel
+                </Button>
+                <Button variant="destructive" onClick={() => { handleClearMemory(); setShowClearMemory('closing'); }}>
+                  Clear
+                </Button>
+              </div>
+            </div>
+            <style jsx global>{`
+              @keyframes fade-in {
+                from { opacity: 0; }
+                to { opacity: 1; }
+              }
+              .animate-fade-in {
+                animation: fade-in 0.25s ease;
+              }
+              @keyframes fade-out {
+                from { opacity: 1; }
+                to { opacity: 0; }
+              }
+              .animate-fade-out {
+                animation: fade-out 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+              }
+              @keyframes popup-scale {
+                0% { transform: scale(0.95) translateY(20px); opacity: 0; }
+                100% { transform: scale(1) translateY(0); opacity: 1; }
+              }
+              .animate-popup-scale {
+                animation: popup-scale 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+              }
+              @keyframes popup-out {
+                0% { transform: scale(1) translateY(0); opacity: 1; }
+                100% { transform: scale(0.95) translateY(20px); opacity: 0; }
+              }
+              .animate-popup-out {
+                animation: popup-out 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+              }
+            `}</style>
+          </div>
+        )}
         <div className="flex-1 flex flex-col h-full p-4 transition-all duration-300 ease-in-out">
         <Card className="h-full flex flex-col">
   <div className="flex-1 overflow-hidden">
