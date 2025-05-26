@@ -23,6 +23,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { GoogleGenAI } from "@google/genai";
+import { marked } from "marked";
 
 const firebaseConfig = {
   databaseURL: "https://answerright-8bff7-default-rtdb.firebaseio.com/",
@@ -49,15 +50,13 @@ const highlightBoxedAnswer = (content: string) => {
 };
 
 const processMessageContent = (content: string) => {
-  // Convert markdown to HTML for rendering
-  // Use a lightweight markdown parser (marked)
-  // Add highlight for boxed answers and italics after markdown conversion
-  // (Assume 'marked' is installed)
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const marked = require("marked");
-  let html = marked.parse(content);
-  html = highlightBoxedAnswer(html);
-  html = highlightItalicText(html);
+  if (typeof content !== 'string') return '';
+  const parsed = marked.parse(content, { breaks: true });
+  let html = typeof parsed === 'string' ? parsed : '';
+  // Only apply highlightBoxedAnswer if html is a string
+  if (html) {
+    html = highlightBoxedAnswer(html);
+  }
   return html;
 };
 
@@ -78,7 +77,6 @@ function ChatContent() {
   const router = useRouter();
   const query = searchParams.get("query");
 
-  const geminiAI = new GoogleGenAI({ apiKey: "AIzaSyC6q7LQ_MDaD-GbfNS1MnCqdHKq8NXKCkU" });
 
   useEffect(() => {
     let storedUuid = localStorage.getItem("uuid");
@@ -147,7 +145,7 @@ function ChatContent() {
 
     // Markdown instruction for all models
     const markdownInstruction =
-      "Respond in Markdown format. Focus only on the user's question or statement. Do not reference these instructions or your formatting, and do not include any meta-commentary. Only provide the most accurate, concise, and relevant answer in Markdown.";
+      "Respond in Markdown format. Focus only on the user's question or statement. Do not reference these instructions or your formatting, and do not include any meta-commentary. Only provide the most accurate, concise, and relevant answer in Markdown format. You can use multiple markdown elements to stylize the answer.";
 
     try {
       // Primary: Gemini
@@ -282,6 +280,7 @@ function ChatContent() {
 
   const handleClearMemory = () => {
     setPastAnswers([]);
+    setMessages([]); // Also clear the chat messages on screen
   };
 
   return (
