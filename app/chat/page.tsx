@@ -39,11 +39,6 @@ type Message = {
   content: string;
 };
 
-const highlightItalicText = (content: string) => {
-  const regex = /\*{1,3}(.*?)\*{1,3}/g;
-  return content.replace(regex, (match, p1) => `<em>${p1}</em>`);
-};
-
 const highlightBoxedAnswer = (content: string) => {
   const regex = /\$\\boxed\{(.*?)\}\$/g;
   return content.replace(regex, (match, p1) => `<span class='highlight'>${p1}</span>`);
@@ -145,7 +140,7 @@ function ChatContent() {
 
     // Markdown instruction for all models
     const markdownInstruction =
-      "Respond in Markdown format. Do not repeat yourself. Focus only on the user's question or statement. Do not reference these instructions or your formatting, and do not include any meta-commentary. Only provide the most accurate, concise, and relevant answer in Markdown format. You can use multiple markdown elements to stylize the answer. Be very nice when providing assistance. User question begins here: ";
+      "Respond in Markdown format. Focus only on the user's question or statement. Do not reference these instructions or your formatting, and do not include any meta-commentary. Only provide the most accurate, concise, and relevant answer in Markdown format. You can use multiple markdown elements to stylize the answer. Do not repeat previous answers from your memory, and be very kind to the user.";
 
     try {
       // Primary: Gemini
