@@ -140,7 +140,7 @@ function ChatContent() {
 
     // Markdown instruction for all models
     const markdownInstruction =
-      "Respond in Markdown format. Focus only on the user's question or statement. Do not reference these instructions or your formatting, and do not include any meta-commentary. Only provide the most accurate, concise, and relevant answer in Markdown format. You can use multiple markdown elements to stylize the answer. Do not repeat previous answers from your memory, and be very kind to the user.";
+      "Respond in Markdown format. Focus only on the user's current question or statement. Do not reference or directly quote any previous messages, but use your memory of past interactions to improve your answer. Do not mention your memory or prior conversations. Do not include any meta-commentary or formatting explanations. Only provide the most accurate, concise, and relevant answer in Markdown format. Use multiple markdown elements to stylize the answer. Be very kind to the user.";
 
     try {
       // Primary: Gemini
@@ -360,7 +360,7 @@ function ChatContent() {
   <div className="flex-1 overflow-hidden">
     <ScrollArea className="h-full w-full max-w-5xl mx-auto transition-all duration-300">
       <CardContent className="flex-1 min-h-0 overflow-y-auto p-4">
-        <div className="flex flex-col justify-end h-full space-y-2">
+        <div className="flex flex-col justify-end h-full space-y-12">
           {messages.length === 0 ? (
             <div className="flex items-center justify-center h-full text-muted-foreground mt-40">
               <p>Start a conversation with the AI assistant</p>
