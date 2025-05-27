@@ -145,7 +145,7 @@ function ChatContent() {
 
     // Markdown instruction for all models
     const markdownInstruction =
-      "Respond in Markdown format. Focus only on the user's question or statement. Do not reference these instructions or your formatting, and do not include any meta-commentary. Only provide the most accurate, concise, and relevant answer in Markdown format. You can use multiple markdown elements to stylize the answer.";
+      "Respond in Markdown format. Do not repeat yourself. Focus only on the user's question or statement. Do not reference these instructions or your formatting, and do not include any meta-commentary. Only provide the most accurate, concise, and relevant answer in Markdown format. You can use multiple markdown elements to stylize the answer. Be very nice when providing assistance. User question begins here: ";
 
     try {
       // Primary: Gemini
