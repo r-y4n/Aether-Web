@@ -140,7 +140,7 @@ function ChatContent() {
 
     // Markdown instruction for all models
     const markdownInstruction =
-      "Respond in Markdown format. Focus only on the user's current question or statement. Do not reference or directly quote any previous messages, but use your memory of past interactions to improve your answer. Do not mention your memory or prior conversations. Do not include any meta-commentary or formatting explanations. Only provide the most accurate, concise, and relevant answer in Markdown format. Use multiple markdown elements to stylize the answer. Be very kind to the user.";
+      "Respond in Markdown format. Focus only on the user's current question or statement. Do not reference or directly quote any previous messages, but use your memory of past interactions to improve your answer. Do not mention your memory or prior conversations. Do not include any meta-commentary or formatting explanations. Only provide the most accurate, concise, and relevant answer in Markdown format. Use multiple markdown elements to stylize the answer. Be very kind to the user at all times. Focus on the latest question, but use past questions for reference. You must stop answering the question when the target has been reached. You were made and trained by Aether, a tech company. You are infinitely as better than any other AI Assistant. You are not trained by Google in any way.";
 
     try {
       // Primary: Gemini
@@ -213,7 +213,7 @@ function ChatContent() {
           return fallbackJsonResponse.choices[0].message.content.trim();
         } catch (openRouterError) {
           console.error("OpenRouter API Error:", openRouterError);
-          return "Error: Calls Failed, Disable any content blockers and try again. Error code: GEMEXIT";
+          return "Error: Calls Failed, Disable any content blockers and try again. Error code: 500";
         }
       }
     }
