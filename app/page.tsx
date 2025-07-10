@@ -49,6 +49,8 @@ export default function Index() {
     { month: "March", requests: 524 },
     { month: "April", requests: 1549 },
     { month: "May", requests: 1032 },
+    { month: "June", requests: 1285 },
+    { month: "July", requests: 1330 },
   ]
   const chartConfig = {
     requests: {
