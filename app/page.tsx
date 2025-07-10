@@ -160,7 +160,7 @@ Our Chrome Extension helps find answers to selected questions online
       <div className="flex w-full items-start gap-2 text-sm">
         <div className="grid gap-2">
           <div className="flex items-center gap-2 leading-none text-muted-foreground">
-            January 1 - May 30 2025
+            January 1 - July 10 2025
           </div>
         </div>
       </div>
